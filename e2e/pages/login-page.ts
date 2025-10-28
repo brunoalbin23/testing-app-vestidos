@@ -3,10 +3,6 @@ import { Page, expect } from '@playwright/test';
 export class LoginPage {
   constructor(private page: Page) {}
 
-  async goto() {
-    await this.page.goto('http://localhost:3000/');
-  }
-
   async loginAsAdmin(username: string, password: string) {
     await this.page.getByRole('link', { name: 'Admin' }).click();
     await this.page.getByRole('textbox', { name: 'Username' }).fill(username);

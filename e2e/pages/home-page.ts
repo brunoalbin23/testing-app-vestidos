@@ -35,4 +35,8 @@ export class HomePage {
   async clickBecomeLender() {
     await this.page.getByRole('link', { name: 'Become a lender' }).click();
   }
+
+  async goToBrowse() {
+    await this.page.getByRole('link', { name: 'Browse', exact: true }).click();
+  }
 }

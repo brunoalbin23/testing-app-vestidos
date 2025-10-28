@@ -5,6 +5,6 @@ export class PrivacyPage {
 
   async assertIsVisible() {
     await expect(this.page).toHaveURL('http://localhost:3000/privacy');
-    await expect(this.page.getByRole('heading', { name: /privacy/i })).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: /Política de Privacidad/i })).toBeVisible();
   }
 }

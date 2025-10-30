@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import {listItems, type Category} from "../../../lib/RentalManagementSystem";
+import {getAvailableSizes, getAvailableColors, getAvailableStyles} from "../../../lib/items-service";
 
 type SearchParams = {
   q?: string;
@@ -23,6 +24,10 @@ export default async function Page({ searchParams }: { searchParams: Promise<Sea
     style: style || undefined,
   });
 
+  const availableSizes = getAvailableSizes();
+  const availableColors = getAvailableColors();
+  const availableStyles = getAvailableStyles();
+
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
       <h1 className="text-2xl sm:text-3xl font-bold">Browse catalog</h1>
@@ -35,9 +40,30 @@ export default async function Page({ searchParams }: { searchParams: Promise<Sea
           <option value="bag">Bags</option>
           <option value="jacket">Jackets</option>
         </select>
-        <input name="size" defaultValue={size} placeholder="Size" className="rounded-xl border px-3 py-2 text-sm" />
-        <input name="color" defaultValue={color} placeholder="Color" className="rounded-xl border px-3 py-2 text-sm" />
-        <input name="style" defaultValue={style} placeholder="Style (e.g., cocktail)" className="rounded-xl border px-3 py-2 text-sm" />
+        <select name="size" defaultValue={size} className="rounded-xl border px-3 py-2 text-sm">
+          <option value="">Any size</option>
+          {availableSizes.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+        <select name="color" defaultValue={color} className="rounded-xl border px-3 py-2 text-sm">
+          <option value="">Any color</option>
+          {availableColors.map((c) => (
+            <option key={c} value={c}>
+              {c.charAt(0).toUpperCase() + c.slice(1)}
+            </option>
+          ))}
+        </select>
+        <select name="style" defaultValue={style} className="rounded-xl border px-3 py-2 text-sm">
+          <option value="">Any style</option>
+          {availableStyles.map((s) => (
+            <option key={s} value={s}>
+              {s.charAt(0).toUpperCase() + s.slice(1).replace(/-/g, " ")}
+            </option>
+          ))}
+        </select>
         <button className="rounded-xl bg-fuchsia-600 text-white px-4 py-2 text-sm">Search</button>
       </form>
 

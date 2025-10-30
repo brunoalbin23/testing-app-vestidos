@@ -76,5 +76,31 @@ export function getItem(id: number) {
   return items.find((i) => i.id === id) ?? null;
 }
 
+export function getAvailableSizes(): string[] {
+  const allSizes = new Set<string>();
+  items.forEach((item) => {
+    item.sizes.forEach((size) => allSizes.add(size));
+  });
+  return Array.from(allSizes).sort();
+}
+
+export function getAvailableColors(): string[] {
+  const allColors = new Set<string>();
+  items.forEach((item) => {
+    allColors.add(item.color);
+  });
+  return Array.from(allColors).sort();
+}
+
+export function getAvailableStyles(): string[] {
+  const allStyles = new Set<string>();
+  items.forEach((item) => {
+    if (item.style) {
+      allStyles.add(item.style);
+    }
+  });
+  return Array.from(allStyles).sort();
+}
+
 export { getItemRentals } from "./rentals-service";
 

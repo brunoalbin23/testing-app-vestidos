@@ -46,8 +46,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<Sea
           <div key={it.id} className="rounded-2xl border bg-white dark:bg-slate-900 overflow-hidden">
             <div className="relative aspect-[3/4] bg-slate-100 dark:bg-slate-800">
               <Image src={it.images[0]} alt={it.alt} fill className="object-cover" />
-              <div className="absolute inset-0 flex items-end p-3">
-                <span className="rounded-full bg-white/85 dark:bg-slate-800/80 px-2.5 py-1 text-xs font-medium text-slate-800 dark:text-slate-100">
+              <div className="absolute bottom-3 left-3">
+                <span className="inline-flex items-center rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-100 shadow-sm">
                   From ${it.pricePerDay}/day
                 </span>
               </div>

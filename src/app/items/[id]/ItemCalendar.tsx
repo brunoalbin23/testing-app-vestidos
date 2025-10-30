@@ -20,7 +20,6 @@ export default function ItemCalendar({ itemId }: Props) {
       .catch(() => setBusy([]));
   }, [itemId]);
 
-  // Show next 30 days
   const today = new Date();
   const days = Array.from({ length: 30 }, (_, i) => {
     const d = new Date(today);

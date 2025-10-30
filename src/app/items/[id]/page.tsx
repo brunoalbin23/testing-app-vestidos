@@ -13,7 +13,6 @@ export default async function ItemDetail({params}: { params: Promise<{ id: strin
     const item = getItem(id);
     if (!item) return notFound();
 
-    // Generate CSRF token; cookie will be set if missing
     const csrf = await getOrCreateCsrfToken();
 
     const booked = await getItemRentals(id);

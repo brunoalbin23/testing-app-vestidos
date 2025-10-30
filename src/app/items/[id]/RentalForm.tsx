@@ -39,7 +39,6 @@ export default function RentalForm({ itemId, csrf }: Props) {
       });
 
       if (!response.ok) {
-        // Try to parse JSON error
         try {
           const data = await response.json();
           setError(data.error || "An error occurred. Please try again.");
@@ -50,7 +49,6 @@ export default function RentalForm({ itemId, csrf }: Props) {
         return;
       }
 
-      // Success - redirect to item page with success message
       router.push(`/items/${itemId}?success=1`);
     } catch (err) {
       setError("An error occurred. Please try again.");

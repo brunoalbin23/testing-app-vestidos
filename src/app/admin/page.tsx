@@ -86,7 +86,6 @@ export default async function Page() {
                     {r.status === "active" ? (
                       <form
                         onSubmit={async () => {
-                          // no-op on server; keep for semantics
                         }}
                         action={`/api/admin/rentals/${r.id}/cancel`}
                         method="POST"

@@ -1,6 +1,5 @@
 import type { Item, Category } from "./types";
 
-// In-memory store for demo. Replace with a DB in production.
 const items: Item[] = [
   {
     id: 1,
@@ -77,6 +76,5 @@ export function getItem(id: number) {
   return items.find((i) => i.id === id) ?? null;
 }
 
-// Re-export getItemRentals from rentals-service for convenience
 export { getItemRentals } from "./rentals-service";
 

@@ -61,7 +61,6 @@ export default function BecomeALender() {
           </p>
         </div>
 
-        {/* Botón de volver */}
         <div className="mt-12 text-center">
           <Link
             href="/"

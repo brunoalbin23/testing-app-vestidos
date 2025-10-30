@@ -8,6 +8,16 @@ function normalizeDate(s: string | null) {
   return m ? s : null;
 }
 
+// Maximum rental duration in days
+const MAX_RENTAL_DAYS = 30;
+
+function calculateDaysDifference(startDate: string, endDate: string): number {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const diffTime = end.getTime() - start.getTime();
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
 export async function POST(req: Request) {
   const form = await req.formData();
   const csrf = form.get("csrf")?.toString() ?? null;
@@ -28,7 +38,25 @@ export async function POST(req: Request) {
 
   const item = getItem(itemId);
   if (!item) return NextResponse.json({ error: "Item not found" }, { status: 404 });
-  if (end < start) return NextResponse.json({ error: "End date must be after start date" }, { status: 400 });
+  
+  // Validate date order
+  if (end < start) {
+    return NextResponse.json({ error: "End date must be after start date" }, { status: 400 });
+  }
+
+  // Validate maximum rental duration
+  const rentalDays = calculateDaysDifference(start, end);
+  if (rentalDays > MAX_RENTAL_DAYS) {
+    return NextResponse.json(
+      { error: `Rental duration cannot exceed ${MAX_RENTAL_DAYS} days. Selected period: ${rentalDays} days.` },
+      { status: 400 }
+    );
+  }
+
+  // Validate minimum rental duration (at least 1 day)
+  if (rentalDays < 1) {
+    return NextResponse.json({ error: "Rental duration must be at least 1 day" }, { status: 400 });
+  }
 
   if (!isItemAvailable(itemId, start, end)) {
     return NextResponse.json({ error: "Item not available for selected dates" }, { status: 409 });

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import NewsletterForm from "./NewsletterForm";
 
 export default function Home() {
   const featured = [
@@ -170,20 +171,7 @@ export default function Home() {
               <h2 className="text-2xl sm:text-3xl font-bold">Join our newsletter</h2>
               <p className="mt-2 text-slate-600 dark:text-slate-400">Get style tips, drops, and exclusive offers.</p>
             </div>
-            <form action="/api/newsletter" method="POST" className="flex w-full gap-3">
-              <label htmlFor="email" className="sr-only">Email</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                placeholder="you@example.com"
-                className="flex-1 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-fuchsia-500"
-              />
-              <button className="inline-flex items-center rounded-xl bg-fuchsia-600 px-5 py-3 text-sm font-semibold text-white hover:bg-fuchsia-500">
-                Subscribe
-              </button>
-            </form>
+            <NewsletterForm />
           </div>
         </section>
       </main>

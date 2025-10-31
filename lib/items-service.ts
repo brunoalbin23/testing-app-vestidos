@@ -102,5 +102,38 @@ export function getAvailableStyles(): string[] {
   return Array.from(allStyles).sort();
 }
 
+function getNextId(): number {
+  return items.length > 0 ? Math.max(...items.map((i) => i.id)) + 1 : 1;
+}
+
+export function createItem(data: Omit<Item, "id">): Item {
+  const newItem: Item = {
+    id: getNextId(),
+    ...data,
+  };
+  items.push(newItem);
+  return newItem;
+}
+
+export function updateItem(id: number, data: Partial<Omit<Item, "id">>): Item | null {
+  const index = items.findIndex((i) => i.id === id);
+  if (index === -1) return null;
+  
+  items[index] = { ...items[index], ...data };
+  return items[index];
+}
+
+export function deleteItem(id: number): boolean {
+  const index = items.findIndex((i) => i.id === id);
+  if (index === -1) return false;
+  
+  items.splice(index, 1);
+  return true;
+}
+
+export function updateItemStock(id: number, stock: number): Item | null {
+  return updateItem(id, { stock });
+}
+
 export { getItemRentals } from "./rentals-service";
 

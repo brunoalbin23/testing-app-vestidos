@@ -11,6 +11,7 @@ export type Item = {
   description: string;
   images: string[];
   alt: string;
+  stock?: number; // cantidad disponible en inventario
 };
 
 export type Rental = {

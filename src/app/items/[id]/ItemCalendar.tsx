@@ -132,14 +132,14 @@ export default function ItemCalendar({ itemId }: Props) {
               <div
                 key={`${currentMonth.getFullYear()}-${currentMonth.getMonth()}-${idx}`}
                 title={toISO(d)}
-                className={`text-center text-xs rounded-md px-1 py-2 min-h-[2.5rem] flex flex-col items-center justify-center ${
+                className={`text-center text-xs rounded-md px-1 py-2 min-h-[2.5rem] flex flex-col items-center justify-center transition-colors ${
                   !isCurrentMonthDate
-                    ? "text-slate-400 dark:text-slate-600"
+                    ? "text-slate-400 dark:text-slate-600 opacity-50"
                     : booked
-                    ? "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200"
+                    ? "bg-rose-200 text-rose-800 dark:bg-rose-900/60 dark:text-rose-100 border-2 border-rose-400 dark:border-rose-700 font-medium"
                     : isTodayDate
                     ? "bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-900/40 dark:text-fuchsia-200 font-semibold ring-2 ring-fuchsia-500"
-                    : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                    : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700"
                 }`}
               >
                 <span>{d.getDate()}</span>

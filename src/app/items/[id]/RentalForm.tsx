@@ -1,14 +1,24 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
 type Props = {
   itemId: number;
   csrf: string;
+  pricePerDay: number;
 };
 
-export default function RentalForm({ itemId, csrf }: Props) {
+function calculateDaysDifference(startDate: string, endDate: string): number {
+  if (!startDate || !endDate) return 0;
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const diffTime = end.getTime() - start.getTime();
+  const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return days > 0 ? days : 0;
+}
+
+export default function RentalForm({ itemId, csrf, pricePerDay }: Props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -17,6 +27,12 @@ export default function RentalForm({ itemId, csrf }: Props) {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+
+  const { days, totalPrice } = useMemo(() => {
+    const calculatedDays = calculateDaysDifference(start, end);
+    const calculatedTotal = calculatedDays > 0 ? calculatedDays * pricePerDay : 0;
+    return { days: calculatedDays, totalPrice: calculatedTotal };
+  }, [start, end, pricePerDay]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -134,6 +150,26 @@ export default function RentalForm({ itemId, csrf }: Props) {
       {error && (
         <div className="sm:col-span-2 rounded-xl border border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-900/20 p-3">
           <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        </div>
+      )}
+      {days > 0 && (
+        <div className="sm:col-span-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 p-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Rental period: {days} {days === 1 ? "day" : "days"}
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">
+                ${pricePerDay} × {days} {days === 1 ? "day" : "days"}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-lg font-bold text-slate-900 dark:text-slate-100">
+                ${totalPrice.toFixed(2)}
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">Total amount</p>
+            </div>
+          </div>
         </div>
       )}
       <div className="sm:col-span-2">

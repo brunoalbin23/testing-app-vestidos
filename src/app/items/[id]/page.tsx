@@ -52,7 +52,7 @@ export default async function ItemDetail({params}: { params: Promise<{ id: strin
 
           <div className="mt-10">
             <h2 className="font-semibold mb-3">Schedule a rental</h2>
-            <RentalForm itemId={id} csrf={csrf} />
+            <RentalForm itemId={id} csrf={csrf} pricePerDay={item.pricePerDay} />
           </div>
         </div>
       </div>

@@ -11,9 +11,42 @@ export default function Home() {
   ];
 
   const steps = [
-    { emoji: "🧭", title: "Browse", text: "Find styles by size, color, designer, or occasion." },
-    { emoji: "📦", title: "Rent", text: "Pick dates and get it delivered to your door." },
-    { emoji: "✨", title: "Return", text: "Wear, wow, and send it back—cleaning included." },
+    { 
+      emoji: "🧭", 
+      title: "Browse", 
+      shortText: "Find styles by size, color, designer, or occasion.",
+      detailedText: "Explorá nuestro catálogo completo de vestidos y accesorios de diseñador. Filtrá por tamaño, color, estilo u ocasión para encontrar la prenda perfecta. Cada item muestra imágenes, descripción completa, disponibilidad y precio por día.",
+      details: [
+        "Busca por estilo, color o diseñador",
+        "Filtra por talla y ocasión",
+        "Revisa disponibilidad en el calendario",
+        "Consulta precios y detalles de cada prenda"
+      ]
+    },
+    { 
+      emoji: "📦", 
+      title: "Rent", 
+      shortText: "Pick dates and get it delivered to your door.",
+      detailedText: "Seleccioná las fechas exactas en las que necesitás la prenda (de 2 a 30 días). Completá tu información de contacto y realizá la reserva. 24 horas antes de tu evento, retirá la prenda en nuestro local. Se requiere dejar un depósito de seguro que se reembolsa al devolver la prenda en buen estado.",
+      details: [
+        "Selecciona fechas de alquiler (2-30 días)",
+        "Completa tus datos de contacto",
+        "Recibe confirmación por email",
+        "Retira 24 horas antes del evento con depósito de seguro"
+      ]
+    },
+    { 
+      emoji: "✨", 
+      title: "Return", 
+      shortText: "Wear, wow, and send it back—cleaning included.",
+      detailedText: "Disfrutá tu evento luciendo increíble. Devuelve la prenda en perfectas condiciones dentro de las 48 horas posteriores al evento. Todas nuestras prendas son limpiadas profesionalmente antes de cada alquiler y deben devolverse en el mismo estado. Una vez verificado, recibirás el reembolso de tu depósito.",
+      details: [
+        "Disfruta tu evento luciendo perfecta",
+        "Devuelve en 48 horas después del evento",
+        "Prenda debe estar en las mismas condiciones",
+        "Recibe reembolso del depósito automáticamente"
+      ]
+    },
   ];
 
   return (
@@ -132,15 +165,68 @@ export default function Home() {
 
         <section id="how" className="bg-slate-50/70 dark:bg-slate-900/60 border-y border-slate-200/60 dark:border-slate-800">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center">How it works</h2>
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="text-center mb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold">How it works</h2>
+              <p className="mt-4 text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                Alquilar vestidos de diseñador nunca fue tan fácil. Seguí estos simples pasos para lucir increíble en tu próximo evento.
+              </p>
+            </div>
+            <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
               {steps.map((s, i) => (
-                <div key={i} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 text-center">
-                  <div className="mx-auto h-12 w-12 rounded-full bg-fuchsia-600/10 flex items-center justify-center text-2xl">{s.emoji}</div>
-                  <h3 className="mt-4 font-semibold">{s.title}</h3>
-                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{s.text}</p>
+                <div key={i} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 hover:shadow-lg transition-shadow">
+                  <div className="flex flex-col items-center text-center">
+                    <div className="mx-auto h-16 w-16 rounded-full bg-gradient-to-br from-fuchsia-500/20 to-rose-500/20 flex items-center justify-center text-3xl mb-6 shadow-sm">
+                      {s.emoji}
+                    </div>
+                    <div className="flex items-center justify-center mb-2">
+                      <span className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-fuchsia-600 text-white text-sm font-bold mr-3">
+                        {i + 1}
+                      </span>
+                      <h3 className="text-xl font-bold">{s.title}</h3>
+                    </div>
+                    <p className="mt-4 text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+                      {s.detailedText}
+                    </p>
+                    <div className="mt-6 w-full">
+                      <ul className="text-left space-y-3">
+                        {s.details.map((detail, idx) => (
+                          <li key={idx} className="flex items-start text-sm text-slate-600 dark:text-slate-400">
+                            <span className="inline-flex items-center justify-center flex-shrink-0 h-5 w-5 rounded-full bg-fuchsia-100 dark:bg-fuchsia-900/30 text-fuchsia-600 dark:text-fuchsia-400 text-xs font-semibold mr-3 mt-0.5">
+                              ✓
+                            </span>
+                            <span>{detail}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               ))}
+            </div>
+            <div className="mt-12 rounded-2xl border border-fuchsia-200 dark:border-fuchsia-800 bg-gradient-to-br from-fuchsia-50 to-rose-50 dark:from-fuchsia-900/20 dark:to-rose-900/20 p-6 sm:p-8">
+              <div className="max-w-3xl mx-auto text-center">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-3">
+                  💡 Información importante
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-700 dark:text-slate-300 text-left">
+                  <div className="flex items-start">
+                    <span className="text-fuchsia-600 dark:text-fuchsia-400 mr-2 font-semibold">•</span>
+                    <span>Podés cancelar hasta 5 días antes del retiro sin cargo</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-fuchsia-600 dark:text-fuchsia-400 mr-2 font-semibold">•</span>
+                    <span>Probar la prenda al retirar (24h antes) te permite cambiar si no te queda</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-fuchsia-600 dark:text-fuchsia-400 mr-2 font-semibold">•</span>
+                    <span>Todas las prendas se limpian profesionalmente antes de cada alquiler</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-fuchsia-600 dark:text-fuchsia-400 mr-2 font-semibold">•</span>
+                    <span>El depósito de seguro se reembolsa automáticamente tras la devolución</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>

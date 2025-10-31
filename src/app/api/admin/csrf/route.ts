@@ -15,17 +15,18 @@ export async function GET() {
   // Si no existe, crear uno nuevo
   if (!csrfToken) {
     csrfToken = crypto.randomUUID();
-    const response = NextResponse.json({ token: csrfToken, success: true });
-    response.cookies.set(CSRF_COOKIE, csrfToken, {
-      httpOnly: false,
-      sameSite: "lax",
-      secure: false,
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-    return response;
   }
 
-  return NextResponse.json({ token: csrfToken, success: true });
+  // Siempre establecer la cookie en la respuesta para asegurar que esté disponible
+  const response = NextResponse.json({ token: csrfToken, success: true });
+  response.cookies.set(CSRF_COOKIE, csrfToken, {
+    httpOnly: false,
+    sameSite: "lax",
+    secure: false,
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  });
+  
+  return response;
 }
 

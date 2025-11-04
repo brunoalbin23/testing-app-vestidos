@@ -30,4 +30,14 @@ test.describe('FAQ page', () => {
     await expect(page.getByRole('link', { name: 'FAQ' })).toBeVisible();
   });
 
+  test('la página FAQ muestra la barra de navegación', async ({ page }) => {
+    const home = new HomePage(page);
+    const faq = new FaqPage(page);
+
+    await home.goto();
+    await home.goToFaq();
+    await faq.assertIsVisible();
+    await faq.assertNavBarVisible();
+  });
+
 });

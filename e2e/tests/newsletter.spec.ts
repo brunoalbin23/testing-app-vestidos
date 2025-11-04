@@ -7,6 +7,6 @@ test('el usuario puede suscribirse al newsletter desde el home', async ({ page }
   const newsletter = new NewsletterPage(page);
 
   await home.goto();
-  await home.subscribeToNewsletter('email@gmail');
+  await home.subscribeToNewsletter('email@gmail.com');
   await newsletter.assertIsVisible();
 });

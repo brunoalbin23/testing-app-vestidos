@@ -6,6 +6,7 @@ export class HomePage {
   readonly featuredSection: Locator;
   readonly productCards: Locator;
   readonly priceTags: Locator;;
+  readonly firstItemDetailsButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -13,6 +14,7 @@ export class HomePage {
     this.featuredSection = page.locator('section#featured');
     this.productCards = this.featuredSection.locator('div.group.rounded-2xl');
     this.priceTags = this.featuredSection.locator('div.absolute.bottom-3.left-3 > span');
+    this.firstItemDetailsButton = page.getByRole('link', { name: 'View details' }).first();
   }
 
   async goto() {
@@ -106,5 +108,9 @@ export class HomePage {
         throw new Error(`No se pudo obtener el tamaño del recuadro del producto #${i + 1}`);
       }
     }
+  }
+
+  async clickFirstItemDetails() {
+    await this.firstItemDetailsButton.click();
   }
 }

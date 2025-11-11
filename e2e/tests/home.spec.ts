@@ -13,4 +13,10 @@ test.describe('Home page', () => {
     await home.goto();
     await home.assertHowItWorksVisible();
   });
+
+  test('los recuadros de precio mantienen proporciones correctas', async ({ page }) => {
+    const home = new HomePage(page);
+    await home.goto();
+    await home.assertPriceBoxProportionate();
+  });
 });

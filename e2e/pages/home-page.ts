@@ -3,10 +3,16 @@ import { expect, Locator, Page } from '@playwright/test';
 export class HomePage {
   readonly page: Page;
   readonly howItWorksSection: Locator;
+  readonly featuredSection: Locator;
+  readonly productCards: Locator;
+  readonly priceTags: Locator;;
 
   constructor(page: Page) {
     this.page = page;
     this.howItWorksSection = page.getByRole('heading', { name: /how it works/i });
+    this.featuredSection = page.locator('section#featured');
+    this.productCards = this.featuredSection.locator('div.group.rounded-2xl');
+    this.priceTags = this.featuredSection.locator('div.absolute.bottom-3.left-3 > span');
   }
 
   async goto() {
@@ -61,7 +67,6 @@ export class HomePage {
 
     const howItWorksContainer = this.page.locator('section:has(h2:has-text("How it works"))');
 
-    // Buscar solo los cards que contienen un heading de paso (Browse, Rent, Return)
     const cards = howItWorksContainer.locator('div.grid div.rounded-2xl.border:has(h3)');
     await expect(cards).toHaveCount(3);
 
@@ -75,4 +80,31 @@ export class HomePage {
     await expect(howItWorksContainer.getByText(/Devuelve la prenda/i)).toBeVisible();
   }
 
+  async assertPriceBoxProportionate() {
+    const productCount = await this.productCards.count();
+    expect(productCount).toBeGreaterThan(0);
+
+    for (let i = 0; i < productCount; i++) {
+      const product = this.productCards.nth(i);
+      const priceTag = product.locator('div.absolute.bottom-3.left-3 > span');
+
+      const productBox = await product.boundingBox();
+      const priceBox = await priceTag.boundingBox();
+
+      if (productBox && priceBox) {
+        const heightRatio = priceBox.height / productBox.height;
+        const aspectRatio = priceBox.height / priceBox.width;
+
+        //No debe ocupar más del 30% del alto del producto
+        expect(heightRatio, `El recuadro del precio del producto #${i + 1} ocupa demasiado espacio (${(heightRatio * 100).toFixed(1)}%)`)
+          .toBeLessThanOrEqual(0.3);
+
+        //No debe estar deformado verticalmente (más alto que ancho * 2)
+        expect(aspectRatio, `El recuadro del precio del producto #${i + 1} está deformado (aspect ratio = ${aspectRatio.toFixed(2)})`)
+          .toBeLessThanOrEqual(2);
+      } else {
+        throw new Error(`No se pudo obtener el tamaño del recuadro del producto #${i + 1}`);
+      }
+    }
+  }
 }

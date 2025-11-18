@@ -6,6 +6,9 @@ export class ItemPage {
   readonly prevMonthButton: Locator;
   readonly monthHeader: Locator;
   readonly calendarDays: Locator;
+  readonly startDateInput: Locator;
+  readonly endDateInput: Locator;
+  //readonly rentalSummary: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -13,6 +16,9 @@ export class ItemPage {
     this.prevMonthButton = page.getByRole('button', { name: 'Previous month' });
     this.monthHeader = page.locator('h3.text-base.font-semibold');
     this.calendarDays = page.locator('.grid.grid-cols-7.gap-1 div[title]');
+    this.startDateInput = page.getByRole('textbox', { name: 'Start date' });
+    this.endDateInput = page.getByRole('textbox', { name: 'End date' });
+    //this.rentalSummary = page.getByText('Rental period', { exact: false });
   }
 
   async verifyCalendarVisible() {
@@ -70,4 +76,12 @@ export class ItemPage {
     const errorText = this.page.getByText('Rental duration cannot exceed');
     await expect(errorText).toBeVisible();
   }
+
+  async assertRentalSummaryVisible() {
+  const summary = this.page.locator('p', { hasText: 'Rental period' });
+
+  await expect(summary).toBeVisible({ timeout: 10000 });
+  await expect(this.page.getByText(/Total amount/i)).toBeVisible();
+  await expect(this.page.getByText(/\$\d+\.\d{2}/)).toBeVisible();
+}
 }

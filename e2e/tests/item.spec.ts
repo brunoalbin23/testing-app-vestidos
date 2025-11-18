@@ -47,4 +47,23 @@ test.describe('Página de Item', () => {
     // Validar que aparezca el mensaje de error
     await itemPage.expectDurationError();
   });
+
+  test('debería mostrar el costo del alquiler al seleccionar un rango de fechas', async ({ page }) => {
+    const homePage = new HomePage(page);
+    const itemPage = new ItemPage(page);
+
+    await homePage.goto();
+    await homePage.clickFirstItemDetails();
+
+    await itemPage.fillReservationForm({
+        name: 'pepito',
+        email: 'pepito@gmail.com',
+        phone: '099999999',
+        startDate: '2025-11-12',
+        endDate: '2025-11-16',
+    });
+
+    await itemPage.submitReservation();
+    await itemPage.assertRentalSummaryVisible();
+  });
 });

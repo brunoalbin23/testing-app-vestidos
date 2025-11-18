@@ -1,0 +1,11 @@
+FROM mcr.microsoft.com/playwright:v1.48.0-jammy
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+# Genera reportes HTML en /app/playwright-report
+CMD ["sh", "-c", "npx playwright test e2e --reporter=html"]

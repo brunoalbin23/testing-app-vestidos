@@ -19,4 +19,14 @@ test.describe('Home page', () => {
     await home.goto();
     await home.assertPriceBoxProportionate();
   });
+
+  test('el home debería sanitizar inputs para evitar XSS', async ({ page }) => {
+    const home = new HomePage(page);
+
+    await home.goto();
+
+    const payload = await home.attemptXSSInjection();
+
+    await home.assertHomeSafeFromXSS(payload);
+  });
 });

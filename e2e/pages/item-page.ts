@@ -8,7 +8,10 @@ export class ItemPage {
   readonly calendarDays: Locator;
   readonly startDateInput: Locator;
   readonly endDateInput: Locator;
-  //readonly rentalSummary: Locator;
+
+  // 🆕 NUEVOS LOCATORS PARA FECHAS
+  readonly bookedDays: Locator;
+  readonly availableDays: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -18,7 +21,12 @@ export class ItemPage {
     this.calendarDays = page.locator('.grid.grid-cols-7.gap-1 div[title]');
     this.startDateInput = page.getByRole('textbox', { name: 'Start date' });
     this.endDateInput = page.getByRole('textbox', { name: 'End date' });
-    //this.rentalSummary = page.getByText('Rental period', { exact: false });
+
+    // bookedDays: aquellos que tengan data attribute (si en el futuro se agrega)
+    this.bookedDays = page.locator('div[title][data-is-booked="true"]');
+
+    // availableDays: todos los días válidos del calendario
+    this.availableDays = page.locator('div[title]');
   }
 
   async verifyCalendarVisible() {
@@ -30,18 +38,17 @@ export class ItemPage {
   async goToNextMonth(times: number = 1) {
     for (let i = 0; i < times; i++) {
       await this.nextMonthButton.click();
-      await this.page.waitForTimeout(500); // breve espera por animación o renderizado
+      await this.page.waitForTimeout(500);
     }
   }
 
   async getCurrentMonthText(): Promise<string> {
     const text = await this.monthHeader.textContent();
     if (!text) {
-        throw new Error('No se pudo obtener el texto del mes actual en el calendario.');
+      throw new Error('No se pudo obtener el texto del mes actual en el calendario.');
     }
     return text.trim();
   }
-
 
   async verifyMonthChanged(initialMonth: string) {
     const currentMonth = await this.getCurrentMonthText();
@@ -78,10 +85,10 @@ export class ItemPage {
   }
 
   async assertRentalSummaryVisible() {
-  const summary = this.page.locator('p', { hasText: 'Rental period' });
+    const summary = this.page.locator('p', { hasText: 'Rental period' });
 
-  await expect(summary).toBeVisible({ timeout: 10000 });
-  await expect(this.page.getByText(/Total amount/i)).toBeVisible();
-  await expect(this.page.getByText(/\$\d+\.\d{2}/)).toBeVisible();
-}
+    await expect(summary).toBeVisible({ timeout: 10000 });
+    await expect(this.page.getByText(/Total amount/i)).toBeVisible();
+    await expect(this.page.getByText(/\$\d+\.\d{2}/)).toBeVisible();
+  }
 }

@@ -40,4 +40,16 @@ test.describe('FAQ page', () => {
     await faq.assertNavBarVisible();
   });
 
+  test('la página FAQ contiene al menos 5 preguntas', async ({ page }) => {
+    const home = new HomePage(page);
+    const faq = new FaqPage(page);
+
+    await home.goto();
+    await home.goToFaq();
+    await faq.assertIsVisible();
+
+    const count = await faq.countQuestions();
+    expect(count).toBeGreaterThanOrEqual(5);
+  });
+
 });

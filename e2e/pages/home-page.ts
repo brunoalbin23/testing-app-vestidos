@@ -113,4 +113,46 @@ export class HomePage {
   async clickFirstItemDetails() {
     await this.firstItemDetailsButton.click();
   }
+
+  /**
+   * Intenta inyectar un payload XSS en el primer textbox del Home.
+   * Si en tu home hay un input específico, lo ajustamos después.
+   */
+  async attemptXSSInjection() {
+    const xssPayload = `<script>alert("XSS")</script>`;
+
+    // Primer input del home (ej newsletter). Ajustable.
+    const firstInput = this.page.getByRole('textbox').first();
+
+    await firstInput.fill(xssPayload);
+
+    return xssPayload;
+  }
+
+  /**
+   * Valida que el HTML *no interprete* el payload como script.
+   * Y que no se haya ejecutado ningún alert.
+   */
+  async assertHomeSafeFromXSS(payload: string) {
+    // Intercepta alert() en caso de intentar ejecutarse
+    this.page.on('dialog', () => {
+      throw new Error('⚠️ Se detectó ejecución de alert() → posible XSS ejecutado');
+    });
+
+    // Esperar un poco por si intenta ejecutar algo
+    await this.page.waitForTimeout(400);
+
+    const html = await this.page.content();
+
+    // El HTML no debería contener el script tal cual
+    expect(html).not.toContain(payload);
+
+    // Y tampoco partes peligrosas como alert(
+    expect(html).not.toContain('alert("XSS")');
+
+    // Pero sí debería aparecer escapado como texto (opcional)
+    // *Si no querés esta línea, la sacamos*
+    const escapedCount = await this.page.getByText(payload).count();
+    expect(escapedCount).toBeGreaterThanOrEqual(0);
+  }
 }

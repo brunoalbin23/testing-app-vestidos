@@ -3,6 +3,8 @@ import { Page, expect } from '@playwright/test';
 export class FaqPage {
   constructor(private page: Page) {}
 
+  questionItems = this.page.locator('.space-y-6 > div');
+
   async assertIsVisible() {
     await expect(this.page).toHaveURL('http://localhost:3000/faq');
     await expect(this.page.getByRole('heading', { name: /Preguntas Frecuentes/i })).toBeVisible();
@@ -21,5 +23,9 @@ export class FaqPage {
     await expect(this.page.getByRole('link', { name: 'FAQ', exact: true })).toBeVisible();
     await expect(this.page.getByRole('link', { name: 'Become a lender', exact: true })).toBeVisible();
     await expect(this.page.getByRole('link', { name: 'Admin', exact: true })).toBeVisible();
+  }
+
+  async countQuestions() {
+    return await this.questionItems.count();
   }
 }

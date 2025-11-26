@@ -1,15 +1,18 @@
-import {getOrCreateCsrfToken} from "@/lib/CsrfSessionManagement";
 export default async function AdminLogin() {
-  const csrf = await getOrCreateCsrfToken();
   return (
     <div className="mx-auto max-w-md px-4 py-16">
-      <h1 className="text-2xl font-bold">Admin sign in</h1>
+      <h1 className="text-2xl font-bold">Iniciar sesión administrador</h1>
       <form action="/api/admin/login" method="POST" className="mt-6 grid gap-3 rounded-2xl border p-4">
-        <input type="hidden" name="csrf" value={csrf} />
-        <input name="username" placeholder="Username" className="rounded-xl border px-4 py-3 text-sm" />
-        <input name="password" type="password" placeholder="Password" className="rounded-xl border px-4 py-3 text-sm" />
-        <button className="rounded-xl bg-fuchsia-600 text-white px-4 py-3 text-sm font-semibold">Sign in</button>
-        <p className="text-xs text-slate-500">Protected area. Authorized staff only.</p>
+        <div>
+          <label htmlFor="username" className="block text-sm font-medium mb-1">Usuario</label>
+          <input id="username" name="username" placeholder="Usuario" defaultValue="admin" className="rounded-xl border px-4 py-3 text-sm w-full" />
+        </div>
+        <div>
+          <label htmlFor="password" className="block text-sm font-medium mb-1">Contraseña</label>
+          <input id="password" name="password" type="password" placeholder="Contraseña" defaultValue="admin123" className="rounded-xl border px-4 py-3 text-sm w-full" />
+        </div>
+        <button className="rounded-xl bg-fuchsia-600 text-white px-4 py-3 text-sm font-semibold">Iniciar sesión</button>
+        <p className="text-xs text-slate-500">Área protegida. Solo personal autorizado.</p>
       </form>
     </div>
   );

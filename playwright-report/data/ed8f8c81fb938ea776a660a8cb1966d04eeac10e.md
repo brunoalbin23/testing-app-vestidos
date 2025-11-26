@@ -1,0 +1,136 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "GlamRent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Browse" [active] [ref=e6] [cursor=pointer]:
+          - /url: /search
+        - link "How it works" [ref=e7] [cursor=pointer]:
+          - /url: /#how
+        - link "Featured" [ref=e8] [cursor=pointer]:
+          - /url: /#featured
+        - link "FAQ" [ref=e9] [cursor=pointer]:
+          - /url: /faq
+      - generic [ref=e10]:
+        - link "Admin" [ref=e11] [cursor=pointer]:
+          - /url: /admin/login
+        - link "Become a lender" [ref=e12] [cursor=pointer]:
+          - /url: /become-a-lender
+  - button "Open Next.js Dev Tools" [ref=e18] [cursor=pointer]:
+    - img [ref=e19]
+  - alert [ref=e22]: Browse catalog
+  - generic [ref=e23]:
+    - heading "Browse catalog" [level=1] [ref=e24]
+    - generic [ref=e26]:
+      - textbox "Search by name, color, or style…" [ref=e27]
+      - combobox [ref=e28]:
+        - option "All categories" [selected]
+        - option "Dresses"
+        - option "Shoes"
+        - option "Bags"
+        - option "Jackets"
+      - combobox [ref=e29]:
+        - option "Any size" [selected]
+        - option "L"
+        - option "M"
+        - option "S"
+        - option "XL"
+        - option "XS"
+      - combobox [ref=e30]:
+        - option "Any color" [selected]
+        - option "Azul"
+        - option "Black"
+        - option "Burgundy"
+        - option "Floral"
+        - option "Gold"
+        - option "Rojo"
+        - option "Verde"
+      - combobox [ref=e31]:
+        - option "Any style" [selected]
+        - option "Black tie"
+        - option "Cocktail"
+        - option "Daytime"
+        - option "Evening"
+      - button "Search" [ref=e32]
+    - generic [ref=e33]:
+      - paragraph [ref=e35]: 7 items found
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - generic [ref=e38]:
+            - img "Model wearing a champagne silk evening gown" [ref=e39]
+            - generic [ref=e41]: From $99/day
+          - generic [ref=e42]:
+            - paragraph [ref=e43]: dress
+            - paragraph [ref=e44]: Silk Evening Gown Editado
+            - paragraph [ref=e45]: "Sizes: XS, S, M, L"
+            - paragraph [ref=e46]: "Style: evening"
+            - link "View details" [ref=e48] [cursor=pointer]:
+              - /url: /items/1
+        - generic [ref=e49]:
+          - generic [ref=e50]:
+            - img "Elegant black tie dress" [ref=e51]
+            - generic [ref=e53]: From $99/day
+          - generic [ref=e54]:
+            - paragraph [ref=e55]: dress
+            - paragraph [ref=e56]: Black Tie Dress
+            - paragraph [ref=e57]: "Sizes: S, M, L, XL"
+            - paragraph [ref=e58]: "Style: black tie"
+            - link "View details" [ref=e60] [cursor=pointer]:
+              - /url: /items/2
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - img "Floral midi dress perfect for daytime events" [ref=e63]
+            - generic [ref=e65]: From $49/day
+          - generic [ref=e66]:
+            - paragraph [ref=e67]: dress
+            - paragraph [ref=e68]: Floral Midi Dress
+            - paragraph [ref=e69]: "Sizes: XS, S, M"
+            - paragraph [ref=e70]: "Style: daytime"
+            - link "View details" [ref=e72] [cursor=pointer]:
+              - /url: /items/3
+        - generic [ref=e73]:
+          - generic [ref=e74]:
+            - img "Velvet cocktail dress in deep tones" [ref=e75]
+            - generic [ref=e77]: From $59/day
+          - generic [ref=e78]:
+            - paragraph [ref=e79]: dress
+            - paragraph [ref=e80]: Velvet Cocktail Dress
+            - paragraph [ref=e81]: "Sizes: S, M, L"
+            - paragraph [ref=e82]: "Style: cocktail"
+            - link "View details" [ref=e84] [cursor=pointer]:
+              - /url: /items/4
+        - generic [ref=e85]:
+          - generic [ref=e86]:
+            - img "textiroooo" [ref=e87]
+            - generic [ref=e89]: From $30/day
+          - generic [ref=e90]:
+            - paragraph [ref=e91]: dress
+            - paragraph [ref=e92]: vestido sariii
+            - paragraph [ref=e93]: "Sizes: XS, S"
+            - link "View details" [ref=e95] [cursor=pointer]:
+              - /url: /items/5
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - img "llllllllllllllllllllllll" [ref=e98]
+            - generic [ref=e100]: From $20/day
+          - generic [ref=e101]:
+            - paragraph [ref=e102]: dress
+            - paragraph [ref=e103]: jjjjjjjjjjjj
+            - paragraph [ref=e104]: "Sizes: S"
+            - link "View details" [ref=e106] [cursor=pointer]:
+              - /url: /items/6
+        - generic [ref=e107]:
+          - generic [ref=e108]:
+            - img "siuuuuuuuuuuu" [ref=e109]
+            - generic [ref=e111]: From $22/day
+          - generic [ref=e112]:
+            - paragraph [ref=e113]: dress
+            - paragraph [ref=e114]: nananna
+            - paragraph [ref=e115]: "Sizes: XL"
+            - link "View details" [ref=e117] [cursor=pointer]:
+              - /url: /items/7
+```

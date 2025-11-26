@@ -13,9 +13,9 @@ export function middleware(request: NextRequest) {
     response.cookies.set(CSRF_COOKIE, newToken, {
       httpOnly: false,
       sameSite: 'lax',
-      secure: false, // Cambiado a false para desarrollo local
+      secure: false,
       path: '/',
-      maxAge: 60 * 60 * 24 * 7, // 7 días
+      maxAge: 60 * 60 * 24 * 7,
     });
   }
   

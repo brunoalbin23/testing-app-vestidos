@@ -1,0 +1,174 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "GlamRent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Browse" [ref=e6] [cursor=pointer]:
+          - /url: /search
+        - link "How it works" [ref=e7] [cursor=pointer]:
+          - /url: /#how
+        - link "Featured" [ref=e8] [cursor=pointer]:
+          - /url: /#featured
+        - link "FAQ" [ref=e9] [cursor=pointer]:
+          - /url: /faq
+      - generic [ref=e10]:
+        - link "Admin" [ref=e11] [cursor=pointer]:
+          - /url: /admin/login
+        - link "Become a lender" [ref=e12] [cursor=pointer]:
+          - /url: /become-a-lender
+  - button "Open Next.js Dev Tools" [ref=e18] [cursor=pointer]:
+    - img [ref=e19]
+  - alert [ref=e22]
+  - generic [ref=e24]:
+    - img "Model wearing a champagne silk evening gown" [ref=e27]
+    - generic [ref=e28]:
+      - heading "Silk Evening Gown Editado" [level=1] [ref=e29]
+      - paragraph [ref=e30]: dress
+      - paragraph [ref=e31]: Elegante vestido de gala editado
+      - paragraph [ref=e32]: From $99/day
+      - paragraph [ref=e33]: "Sizes: XS, S, M, L"
+      - paragraph [ref=e34]: "Color: gold • Style: evening"
+      - generic [ref=e35]:
+        - heading "Availability" [level=2] [ref=e36]
+        - generic [ref=e37]:
+          - generic [ref=e38]:
+            - button "Previous month" [ref=e39]:
+              - img [ref=e40]
+            - heading "November 2025" [level=3] [ref=e43]
+            - button "Next month" [ref=e44]:
+              - img [ref=e45]
+          - generic [ref=e47]:
+            - generic [ref=e48]:
+              - generic [ref=e49]: Sun
+              - generic [ref=e50]: Mon
+              - generic [ref=e51]: Tue
+              - generic [ref=e52]: Wed
+              - generic [ref=e53]: Thu
+              - generic [ref=e54]: Fri
+              - generic [ref=e55]: Sat
+            - generic [ref=e56]:
+              - generic "2025-10-26" [ref=e57]:
+                - generic [ref=e58]: "26"
+              - generic "2025-10-27" [ref=e59]:
+                - generic [ref=e60]: "27"
+              - generic "2025-10-28" [ref=e61]:
+                - generic [ref=e62]: "28"
+              - generic "2025-10-29" [ref=e63]:
+                - generic [ref=e64]: "29"
+              - generic "2025-10-30" [ref=e65]:
+                - generic [ref=e66]: "30"
+              - generic "2025-10-31" [ref=e67]:
+                - generic [ref=e68]: "31"
+              - generic "2025-11-01" [ref=e69]:
+                - generic [ref=e70]: "1"
+              - generic "2025-11-02" [ref=e71]:
+                - generic [ref=e72]: "2"
+              - generic "2025-11-03" [ref=e73]:
+                - generic [ref=e74]: "3"
+              - generic "2025-11-04" [ref=e75]:
+                - generic [ref=e76]: "4"
+              - generic "2025-11-05" [ref=e77]:
+                - generic [ref=e78]: "5"
+              - generic "2025-11-06" [ref=e79]:
+                - generic [ref=e80]: "6"
+              - generic "2025-11-07" [ref=e81]:
+                - generic [ref=e82]: "7"
+              - generic "2025-11-08" [ref=e83]:
+                - generic [ref=e84]: "8"
+              - generic "2025-11-09" [ref=e85]:
+                - generic [ref=e86]: "9"
+              - generic "2025-11-10" [ref=e87]:
+                - generic [ref=e88]: "10"
+              - generic "2025-11-11" [ref=e89]:
+                - generic [ref=e90]: "11"
+              - generic "2025-11-12" [ref=e91]:
+                - generic [ref=e92]: "12"
+                - generic [ref=e93]: Booked
+              - generic "2025-11-13" [ref=e94]:
+                - generic [ref=e95]: "13"
+                - generic [ref=e96]: Booked
+              - generic "2025-11-14" [ref=e97]:
+                - generic [ref=e98]: "14"
+                - generic [ref=e99]: Booked
+              - generic "2025-11-15" [ref=e100]:
+                - generic [ref=e101]: "15"
+                - generic [ref=e102]: Booked
+              - generic "2025-11-16" [ref=e103]:
+                - generic [ref=e104]: "16"
+                - generic [ref=e105]: Booked
+              - generic "2025-11-17" [ref=e106]:
+                - generic [ref=e107]: "17"
+              - generic "2025-11-18" [ref=e108]:
+                - generic [ref=e109]: "18"
+              - generic "2025-11-19" [ref=e110]:
+                - generic [ref=e111]: "19"
+              - generic "2025-11-20" [ref=e112]:
+                - generic [ref=e113]: "20"
+              - generic "2025-11-21" [ref=e114]:
+                - generic [ref=e115]: "21"
+              - generic "2025-11-22" [ref=e116]:
+                - generic [ref=e117]: "22"
+              - generic "2025-11-23" [ref=e118]:
+                - generic [ref=e119]: "23"
+              - generic "2025-11-24" [ref=e120]:
+                - generic [ref=e121]: "24"
+              - generic "2025-11-25" [ref=e122]:
+                - generic [ref=e123]: "25"
+              - generic "2025-11-26" [ref=e124]:
+                - generic [ref=e125]: "26"
+                - generic [ref=e126]: Booked
+              - generic "2025-11-27" [ref=e127]:
+                - generic [ref=e128]: "27"
+                - generic [ref=e129]: Booked
+              - generic "2025-11-28" [ref=e130]:
+                - generic [ref=e131]: "28"
+              - generic "2025-11-29" [ref=e132]:
+                - generic [ref=e133]: "29"
+              - generic "2025-11-30" [ref=e134]:
+                - generic [ref=e135]: "30"
+              - generic "2025-12-01" [ref=e136]:
+                - generic [ref=e137]: "1"
+              - generic "2025-12-02" [ref=e138]:
+                - generic [ref=e139]: "2"
+              - generic "2025-12-03" [ref=e140]:
+                - generic [ref=e141]: "3"
+              - generic "2025-12-04" [ref=e142]:
+                - generic [ref=e143]: "4"
+              - generic "2025-12-05" [ref=e144]:
+                - generic [ref=e145]: "5"
+              - generic "2025-12-06" [ref=e146]:
+                - generic [ref=e147]: "6"
+        - paragraph [ref=e148]: Dates marked are already booked.
+      - generic [ref=e149]:
+        - heading "Schedule a rental" [level=2] [ref=e150]
+        - generic [ref=e151]:
+          - generic [ref=e152]:
+            - generic [ref=e153]: Full name
+            - textbox "Full name" [ref=e154]: pepito
+          - generic [ref=e155]:
+            - generic [ref=e156]: Email
+            - textbox "Email" [ref=e157]: pepito@gmail.com
+          - generic [ref=e158]:
+            - generic [ref=e159]: Phone
+            - textbox "Phone" [ref=e160]: "099999999"
+          - generic [ref=e161]:
+            - generic [ref=e162]: Start date
+            - textbox "Start date" [ref=e163]: 2025-11-26
+          - generic [ref=e164]:
+            - generic [ref=e165]: End date
+            - textbox "End date" [ref=e166]: 2025-11-27
+          - paragraph [ref=e168]: Item not available for selected dates
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - paragraph [ref=e172]: "Rental period: 1 day"
+              - paragraph [ref=e173]: $99 × 1 day
+            - generic [ref=e174]:
+              - paragraph [ref=e175]: $99.00
+              - paragraph [ref=e176]: Total amount
+          - button "Request rental" [ref=e178]
+          - paragraph [ref=e179]: No account required. We'll confirm availability via email.
+```

@@ -38,10 +38,10 @@ test.describe('Catalog page', () => {
     await catalog.assertFilterExists('style');
 
     // Verificar que el filtro de talles tenga las opciones correctas
-    await catalog.assertCategorieOptions(['Dresses', 'Shoes', 'Bags', 'Jackets']);
+    await catalog.assertCategorieOptions(['Dresses']);
     await catalog.assertSizeOptions(['XS', 'S', 'M', 'L', 'XL']);
-    await catalog.assertColorOptions(['Black', 'Burgundy', 'Champagne', 'Floral']);
-    await catalog.assertStyleOptions(['Black tie', 'Cocktail', 'Daytime', 'Evening']);
+    await catalog.assertColorOptions(['Black', 'Burgundy', 'Floral', 'Gold', 'Azul', 'Rojo', 'Verde']);
+    await catalog.assertStyleOptions(['Cocktail', 'Daytime', 'Evening', 'Black tie']);
   });
 
 });

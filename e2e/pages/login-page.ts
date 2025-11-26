@@ -4,17 +4,24 @@ export class LoginPage {
   constructor(private page: Page) {}
 
   async loginAsAdmin(username: string, password: string) {
-    await this.page.getByRole('link', { name: 'Admin' }).click();
-    await this.page.getByRole('textbox', { name: 'Username' }).fill(username);
-    await this.page.getByRole('textbox', { name: 'Password' }).fill(password);
+    // Navegar directamente a /admin/login en lugar de usar el link
+    await this.page.goto('http://localhost:3000/admin/login');
+    
+    // Esperar a que los inputs sean visibles
+    await this.page.waitForSelector('#username', { timeout: 5000 });
+    await this.page.waitForSelector('#password', { timeout: 5000 });
+    
+    // Rellenar usando IDs
+    await this.page.fill('#username', username);
+    await this.page.fill('#password', password);
 
     // Espera explícita a que la página navegue al dashboard
     await Promise.all([
       this.page.waitForURL(/\/admin$/i), 
-      this.page.getByRole('button', { name: 'Sign in' }).click(),
+      this.page.getByRole('button', { name: 'Iniciar sesión' }).click(),
     ]);
 
     // Confirmar que el dashboard se cargó
-    await expect(this.page.getByRole('heading', { name: /Admin dashboard/i })).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: /Panel de administración/i })).toBeVisible();
   }
 }

@@ -1,0 +1,253 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "GlamRent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Browse" [ref=e6] [cursor=pointer]:
+          - /url: /search
+        - link "How it works" [ref=e7] [cursor=pointer]:
+          - /url: /#how
+        - link "Featured" [ref=e8] [cursor=pointer]:
+          - /url: /#featured
+        - link "FAQ" [ref=e9] [cursor=pointer]:
+          - /url: /faq
+      - generic [ref=e10]:
+        - link "Admin" [ref=e11] [cursor=pointer]:
+          - /url: /admin/login
+        - link "Become a lender" [ref=e12] [cursor=pointer]:
+          - /url: /become-a-lender
+  - generic [ref=e13]:
+    - generic [ref=e14]:
+      - heading "Panel de administración" [level=1] [ref=e15]
+      - generic [ref=e16]:
+        - link "Explorador API" [ref=e17] [cursor=pointer]:
+          - /url: /admin/api-explorer
+        - button "Cerrar sesión" [ref=e19]
+    - generic [ref=e20]:
+      - heading "Características Implementadas" [level=2] [ref=e21]
+      - generic [ref=e22]:
+        - paragraph [ref=e24]:
+          - strong [ref=e25]: ✓ ¡Todas las características del backend de administrador han sido implementadas!
+        - button "Autenticación +" [ref=e27]:
+          - generic [ref=e28]: Autenticación
+          - generic [ref=e29]: +
+        - button "Gestión de Artículos +" [ref=e31]:
+          - generic [ref=e32]: Gestión de Artículos
+          - generic [ref=e33]: +
+        - button "Gestión de Alquileres +" [ref=e35]:
+          - generic [ref=e36]: Gestión de Alquileres
+          - generic [ref=e37]: +
+        - button "Análisis y Exportación +" [ref=e39]:
+          - generic [ref=e40]: Análisis y Exportación
+          - generic [ref=e41]: +
+        - button "Características +" [ref=e43]:
+          - generic [ref=e44]: Características
+          - generic [ref=e45]: +
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - heading "Enlaces Rápidos" [level=3] [ref=e48]
+            - list [ref=e49]:
+              - listitem [ref=e50]:
+                - link "→ Explorador de API" [ref=e51] [cursor=pointer]:
+                  - /url: /admin/api-explorer
+              - listitem [ref=e52]:
+                - link "→ Documentación de API" [ref=e53] [cursor=pointer]:
+                  - /url: ADMIN_API.md
+              - listitem [ref=e54]:
+                - link "→ Guía de Implementación" [ref=e55] [cursor=pointer]:
+                  - /url: ADMIN_IMPLEMENTATION.md
+          - generic [ref=e56]:
+            - heading "Estadísticas Clave" [level=3] [ref=e57]
+            - list [ref=e58]:
+              - listitem [ref=e59]: • 3 endpoints de autenticación
+              - listitem [ref=e60]: • 8 endpoints de gestión de artículos
+              - listitem [ref=e61]: • 3 endpoints de gestión de alquileres
+              - listitem [ref=e62]: • 3 endpoints de análisis y exportación
+              - listitem [ref=e63]: • 17 endpoints de API en total
+    - generic [ref=e64]:
+      - heading "Estadísticas del Dashboard" [level=2] [ref=e65]
+      - generic [ref=e66]:
+        - generic [ref=e67]:
+          - generic [ref=e68]:
+            - paragraph [ref=e69]: Total de Artículos
+            - paragraph [ref=e70]: "7"
+          - generic [ref=e71]:
+            - paragraph [ref=e72]: Alquileres Activos
+            - paragraph [ref=e73]: "6"
+          - generic [ref=e74]:
+            - paragraph [ref=e75]: Ingresos Totales
+            - paragraph [ref=e76]: $1133.00
+          - generic [ref=e77]:
+            - paragraph [ref=e78]: Duración Promedio
+            - paragraph [ref=e79]: 2 días
+        - generic [ref=e80]:
+          - generic [ref=e81]:
+            - heading "Artículos Más Alquilados" [level=3] [ref=e82]
+            - generic [ref=e83]:
+              - generic [ref=e84]:
+                - generic [ref=e85]:
+                  - paragraph [ref=e86]: Silk Evening Gown Editado
+                  - paragraph [ref=e87]: dress
+                - generic [ref=e88]: 5 alquileres
+              - generic [ref=e89]:
+                - generic [ref=e90]:
+                  - paragraph [ref=e91]: nananna
+                  - paragraph [ref=e92]: dress
+                - generic [ref=e93]: 1 alquileres
+              - generic [ref=e94]:
+                - generic [ref=e95]:
+                  - paragraph [ref=e96]: Black Tie Dress
+                  - paragraph [ref=e97]: dress
+                - generic [ref=e98]: 0 alquileres
+              - generic [ref=e99]:
+                - generic [ref=e100]:
+                  - paragraph [ref=e101]: Floral Midi Dress
+                  - paragraph [ref=e102]: dress
+                - generic [ref=e103]: 0 alquileres
+              - generic [ref=e104]:
+                - generic [ref=e105]:
+                  - paragraph [ref=e106]: Velvet Cocktail Dress
+                  - paragraph [ref=e107]: dress
+                - generic [ref=e108]: 0 alquileres
+          - generic [ref=e109]:
+            - heading "Artículos con Mayor Ingreso" [level=3] [ref=e110]
+            - generic [ref=e111]:
+              - generic [ref=e112]:
+                - generic [ref=e113]:
+                  - paragraph [ref=e114]: Silk Evening Gown Editado
+                  - paragraph [ref=e115]: $99/día
+                - generic [ref=e116]: $1089.00
+              - generic [ref=e117]:
+                - generic [ref=e118]:
+                  - paragraph [ref=e119]: nananna
+                  - paragraph [ref=e120]: $22/día
+                - generic [ref=e121]: $44.00
+              - generic [ref=e122]:
+                - generic [ref=e123]:
+                  - paragraph [ref=e124]: Black Tie Dress
+                  - paragraph [ref=e125]: $99/día
+                - generic [ref=e126]: $0.00
+              - generic [ref=e127]:
+                - generic [ref=e128]:
+                  - paragraph [ref=e129]: Floral Midi Dress
+                  - paragraph [ref=e130]: $49/día
+                - generic [ref=e131]: $0.00
+              - generic [ref=e132]:
+                - generic [ref=e133]:
+                  - paragraph [ref=e134]: Velvet Cocktail Dress
+                  - paragraph [ref=e135]: $59/día
+                - generic [ref=e136]: $0.00
+        - generic [ref=e137]:
+          - generic [ref=e138]:
+            - paragraph [ref=e139]: Exportar Datos
+            - paragraph [ref=e140]: Descargar todos los artículos y alquileres como JSON
+          - button "Exportar" [ref=e141]
+    - generic [ref=e142]:
+      - heading "Gestión de Inventario" [level=2] [ref=e143]
+      - generic [ref=e144]:
+        - generic [ref=e145]:
+          - paragraph [ref=e147]: 1 artículo en inventario
+          - button "+ Agregar Artículo" [ref=e148]
+        - table [ref=e150]:
+          - rowgroup [ref=e151]:
+            - row "ID Nombre Categoría Tallas Precio/día Stock Acciones" [ref=e152]:
+              - cell "ID" [ref=e153]
+              - cell "Nombre" [ref=e154]
+              - cell "Categoría" [ref=e155]
+              - cell "Tallas" [ref=e156]
+              - cell "Precio/día" [ref=e157]
+              - cell "Stock" [ref=e158]
+              - cell "Acciones" [ref=e159]
+          - rowgroup [ref=e160]:
+            - row "9999 Test Item E2E dress S, M $42 5 Editar Stock Eliminar" [ref=e161]:
+              - cell "9999" [ref=e162]
+              - cell "Test Item E2E" [ref=e163]
+              - cell "dress" [ref=e164]
+              - cell "S, M" [ref=e165]
+              - cell "$42" [ref=e166]
+              - cell "5" [ref=e167]
+              - cell "Editar Stock Eliminar" [ref=e168]:
+                - generic [ref=e169]:
+                  - button "Editar" [ref=e170]
+                  - button "Stock" [ref=e171]
+                  - button "Eliminar" [ref=e172]
+    - generic [ref=e173]:
+      - heading "Alquileres Programados" [level=2] [ref=e174]
+      - table [ref=e176]:
+        - rowgroup [ref=e177]:
+          - row "ID Alquiler Artículo Fechas Cliente Estado Acciones" [ref=e178]:
+            - cell "ID Alquiler" [ref=e179]
+            - cell "Artículo" [ref=e180]
+            - cell "Fechas" [ref=e181]
+            - cell "Cliente" [ref=e182]
+            - cell "Estado" [ref=e183]
+            - cell "Acciones" [ref=e184]
+        - rowgroup [ref=e185]:
+          - row "5ef0dfda 1 2025-11-12 → 2025-11-16 pepito pepito@gmail.com • 099999999 Activo Cancelar" [ref=e186]:
+            - cell "5ef0dfda" [ref=e187]
+            - cell "1" [ref=e188]
+            - cell "2025-11-12 → 2025-11-16" [ref=e189]
+            - cell "pepito pepito@gmail.com • 099999999" [ref=e190]:
+              - text: pepito
+              - generic [ref=e191]: pepito@gmail.com • 099999999
+            - cell "Activo" [ref=e192]
+            - cell "Cancelar" [ref=e193]:
+              - button "Cancelar" [ref=e195]
+          - row "37e67235 1 2025-12-15 → 2025-12-17 Test User Flow testflow@example.com • 1234567890 Activo Cancelar" [ref=e196]:
+            - cell "37e67235" [ref=e197]
+            - cell "1" [ref=e198]
+            - cell "2025-12-15 → 2025-12-17" [ref=e199]
+            - cell "Test User Flow testflow@example.com • 1234567890" [ref=e200]:
+              - text: Test User Flow
+              - generic [ref=e201]: testflow@example.com • 1234567890
+            - cell "Activo" [ref=e202]
+            - cell "Cancelar" [ref=e203]:
+              - button "Cancelar" [ref=e205]
+          - row "704b8cc6 1 2025-12-10 → 2025-12-12 Test User Flow testflow@example.com • 1234567890 Activo Cancelar" [ref=e206]:
+            - cell "704b8cc6" [ref=e207]
+            - cell "1" [ref=e208]
+            - cell "2025-12-10 → 2025-12-12" [ref=e209]
+            - cell "Test User Flow testflow@example.com • 1234567890" [ref=e210]:
+              - text: Test User Flow
+              - generic [ref=e211]: testflow@example.com • 1234567890
+            - cell "Activo" [ref=e212]
+            - cell "Cancelar" [ref=e213]:
+              - button "Cancelar" [ref=e215]
+          - row "33c31cf0 1 2025-12-01 → 2025-12-03 Test User test@example.com • 1234567890 Activo Cancelar" [ref=e216]:
+            - cell "33c31cf0" [ref=e217]
+            - cell "1" [ref=e218]
+            - cell "2025-12-01 → 2025-12-03" [ref=e219]
+            - cell "Test User test@example.com • 1234567890" [ref=e220]:
+              - text: Test User
+              - generic [ref=e221]: test@example.com • 1234567890
+            - cell "Activo" [ref=e222]
+            - cell "Cancelar" [ref=e223]:
+              - button "Cancelar" [ref=e225]
+          - row "6705a7c6 1 2025-11-26 → 2025-11-27 pepito pepito@gmail.com • 099999999 Activo Cancelar" [ref=e226]:
+            - cell "6705a7c6" [ref=e227]
+            - cell "1" [ref=e228]
+            - cell "2025-11-26 → 2025-11-27" [ref=e229]
+            - cell "pepito pepito@gmail.com • 099999999" [ref=e230]:
+              - text: pepito
+              - generic [ref=e231]: pepito@gmail.com • 099999999
+            - cell "Activo" [ref=e232]
+            - cell "Cancelar" [ref=e233]:
+              - button "Cancelar" [ref=e235]
+          - row "8b1cb906 7 2025-11-27 → 2025-11-29 Bruno Albín albinbruno23@gmail.com • 091697659 Activo Cancelar" [ref=e236]:
+            - cell "8b1cb906" [ref=e237]
+            - cell "7" [ref=e238]
+            - cell "2025-11-27 → 2025-11-29" [ref=e239]
+            - cell "Bruno Albín albinbruno23@gmail.com • 091697659" [ref=e240]:
+              - text: Bruno Albín
+              - generic [ref=e241]: albinbruno23@gmail.com • 091697659
+            - cell "Activo" [ref=e242]
+            - cell "Cancelar" [ref=e243]:
+              - button "Cancelar" [ref=e245]
+  - button "Open Next.js Dev Tools" [ref=e251] [cursor=pointer]:
+    - img [ref=e252]
+  - alert [ref=e255]
+```

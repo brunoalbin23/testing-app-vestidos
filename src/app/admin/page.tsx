@@ -16,24 +16,13 @@ export default async function Page() {
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Panel de administración</h1>
+        <h1 className="text-2xl font-bold">Export</h1>
         <div className="flex gap-3">
-          <a
-            href="/admin/api-explorer"
-            className="text-sm rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
-          >
-            Explorador API
-          </a>
           <form action="/api/admin/logout" method="POST">
             <button className="text-sm rounded-lg border px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Cerrar sesión</button>
           </form>
         </div>
       </div>
-
-      <section className="mt-10">
-        <h2 className="text-xl font-semibold mb-4">Características Implementadas</h2>
-        <FeaturesList />
-      </section>
 
       <section className="mt-8">
         <h2 className="text-xl font-semibold mb-6">Estadísticas del Dashboard</h2>

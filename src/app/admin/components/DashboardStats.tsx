@@ -123,7 +123,7 @@ export default function DashboardStats() {
       {/* Botón de exportación */}
       <div className="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-slate-50 dark:bg-slate-900 flex items-center justify-between">
         <div>
-          <p className="font-medium">Exportar Datos</p>
+          <p className="font-medium">Exportar Datos</p> 
           <p className="text-xs text-slate-500">Descargar todos los artículos y alquileres como JSON</p>
         </div>
         <button

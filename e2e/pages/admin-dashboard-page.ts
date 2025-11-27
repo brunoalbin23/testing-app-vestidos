@@ -4,7 +4,7 @@ export class AdminDashboardPage {
   constructor(private page: Page) {}
 
   async assertIsVisible() {
-    await expect(this.page.getByRole('heading', { name: /Panel de administración|Admin dashboard/i })).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: /Export|Admin dashboard/i })).toBeVisible();
   }
 
   async logout() {

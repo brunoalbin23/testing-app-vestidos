@@ -22,6 +22,6 @@ export class LoginPage {
     ]);
 
     // Confirmar que el dashboard se cargó
-    await expect(this.page.getByRole('heading', { name: /Panel de administración/i })).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: /Export/i })).toBeVisible();
   }
 }

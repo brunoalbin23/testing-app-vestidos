@@ -1,170 +1,125 @@
-import { test, expect } from '@playwright/test';
-import { AdminDashboardPage } from '../pages/admin-dashboard-page';
-import { HomePage } from '../pages/home-page';
-
-const test_admin = test.extend({
-  adminPage: async ({ page }, use) => {
-    const homePage = new HomePage(page);
-    const loginPage = (await import('../pages/login-page')).LoginPage;
-    const dashboard = new AdminDashboardPage(page);
-
-    // Login
-    await homePage.goto();
-    const lp = new loginPage(page);
-    await lp.loginAsAdmin('admin', 'admin123');
-
-    await use(dashboard);
-  },
-});
+import { test } from '../fixtures/admin-fixture';
+import { expect } from '@playwright/test';
 
 test('crear articulo desde admin', async ({ adminPage, page }) => {
-  // Mock responses: POST to create, GET to list
   const newItem = {
-    id: 9999,
-    name: 'Test Item E2E',
+    name: 'Vestido Test E2E ' + Date.now(),
     category: 'dress',
-    pricePerDay: 42,
-    sizes: ['S','M'],
-    color: 'testcolor',
-    style: 'test-style',
-    description: 'Descripción test',
-    images: ['/images/dresses/test.jpg'],
-    alt: 'Alt test',
-    stock: 5
+    pricePerDay: '45',
+    sizes: 'S, M, L',
+    color: 'azul',
+    style: 'casual',
+    description: 'Un vestido de prueba E2E',
+    images: '/images/dresses/test.jpg',
+    alt: 'Test dress',
+    stock: '10'
   };
 
-  await page.route('**/api/admin/items', (route, request) => {
-    if (request.method() === 'POST') {
-      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ item: newItem }) });
-    } else {
-      // GET
-      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ items: [newItem] }) });
-    }
-  });
-
   await adminPage.assertIsVisible();
+  await page.waitForTimeout(1000);
 
   // Abrir formulario de creación
   await page.getByRole('button', { name: /Agregar Artículo/i }).click();
+  await page.waitForTimeout(500);
 
   // Rellenar el formulario
   await page.fill('#name', newItem.name);
   await page.selectOption('#category', newItem.category);
-  await page.fill('#pricePerDay', String(newItem.pricePerDay));
-  await page.fill('#sizes', newItem.sizes.join(', '));
+  await page.fill('#pricePerDay', newItem.pricePerDay);
+  await page.fill('#sizes', newItem.sizes);
   await page.fill('#color', newItem.color);
-  await page.fill('#images', newItem.images.join(', '));
+  await page.fill('#style', newItem.style);
+  await page.fill('#images', newItem.images);
   await page.fill('#alt', newItem.alt);
   await page.fill('#description', newItem.description);
-  await page.fill('#stock', String(newItem.stock));
+  await page.fill('#stock', newItem.stock);
 
-  // Enviar
-  await Promise.all([
-    page.waitForResponse('**/api/admin/items'),
-    page.getByRole('button', { name: /Crear Artículo/i }).click(),
-  ]);
+  // Enviar formulario
+  await page.getByRole('button', { name: /Crear Artículo/i }).click();
+  await page.waitForTimeout(1000);
 
-  // Ahora el listado debería mostrar el item
+  // Verificar que aparece en la tabla
   await expect(page.getByText(newItem.name)).toBeVisible();
 });
 
 test('editar articulo desde admin', async ({ adminPage, page }) => {
-  const existing = {
-    id: 1001,
-    name: 'Item to Edit',
-    category: 'dress',
-    pricePerDay: 10,
-    sizes: ['S'],
-    color: 'black',
-    style: 'evening',
-    description: 'old',
-    images: ['/images/dresses/old.jpg'],
-    alt: 'old alt',
-    stock: 2
-  };
-
-  const updated = { ...existing, name: 'Item Edited E2E', pricePerDay: 12 };
-
-  // GET initial items
-  await page.route('**/api/admin/items', (route, request) => {
-    if (request.method() === 'GET') {
-      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ items: [existing] }) });
-    } else {
-      route.continue();
-    }
-  });
-
+  const itemName = 'Vestido para Editar ' + Date.now();
+  const updatedName = 'Vestido Editado ' + Date.now();
+  
+  // Primero crear un artículo
   await adminPage.assertIsVisible();
+  await page.waitForTimeout(1000);
 
-  // Ensure table shows existing
-  await expect(page.getByText(existing.name)).toBeVisible();
+  await page.getByRole('button', { name: /Agregar Artículo/i }).click();
+  await page.waitForTimeout(500);
 
-  // Click Editar on that row
-  const row = page.locator('tbody tr').filter({ hasText: existing.name }).first();
+  await page.fill('#name', itemName);
+  await page.selectOption('#category', 'dress');
+  await page.fill('#pricePerDay', '50');
+  await page.fill('#sizes', 'M');
+  await page.fill('#color', 'negro');
+  await page.fill('#style', 'formal');
+  await page.fill('#images', '/images/dresses/edit.jpg');
+  await page.fill('#alt', 'edit test');
+  await page.fill('#description', 'Description');
+  await page.fill('#stock', '5');
+
+  await page.getByRole('button', { name: /Crear Artículo/i }).click();
+  await page.waitForTimeout(1000);
+
+  // Ahora editar
+  const row = page.locator('tbody tr').filter({ hasText: itemName }).first();
   await row.getByRole('button', { name: /Editar/i }).click();
+  await page.waitForTimeout(500);
 
-  // Intercept PUT and subsequent GET
-  await page.route(`**/api/admin/items/${existing.id}`, (route, request) => {
-    if (request.method() === 'PUT') {
-      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ item: updated }) });
-    } else {
-      route.continue();
-    }
-  });
-  await page.route('**/api/admin/items', (route) => {
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ items: [updated] }) });
-  });
+  // Cambiar nombre y precio
+  await page.fill('#name', updatedName);
+  await page.fill('#pricePerDay', '75');
 
-  // Update fields
-  await page.fill('#name', updated.name);
-  await page.fill('#pricePerDay', String(updated.pricePerDay));
+  // Actualizar
+  await page.getByRole('button', { name: /Actualizar Artículo/i }).click();
+  await page.waitForTimeout(1000);
 
-  // Submit
-  await Promise.all([
-    page.waitForResponse(`**/api/admin/items/${existing.id}`),
-    page.getByRole('button', { name: /Actualizar Artículo/i }).click(),
-  ]);
-
-  await expect(page.getByText(updated.name)).toBeVisible();
+  // Verificar cambios
+  await expect(page.getByText(updatedName)).toBeVisible();
+  await expect(page.getByText(itemName)).not.toBeVisible();
 });
 
 test('eliminar articulo desde admin', async ({ adminPage, page }) => {
-  const itemToDelete = {
-    id: 2002,
-    name: 'Item To Delete',
-    category: 'dress',
-    pricePerDay: 20,
-    sizes: ['M'],
-    color: 'red',
-    images: ['/images/dresses/del.jpg'],
-    alt: 'del',
-  };
-
-  await page.route('**/api/admin/items', (route, request) => {
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ items: [itemToDelete] }) });
-  });
-
+  const itemName = 'Vestido para Eliminar ' + Date.now();
+  
+  // Primero crear un artículo
   await adminPage.assertIsVisible();
-  await expect(page.getByText(itemToDelete.name)).toBeVisible();
+  await page.waitForTimeout(1000);
 
-  // Accept confirm dialogs
+  await page.getByRole('button', { name: /Agregar Artículo/i }).click();
+  await page.waitForTimeout(500);
+
+  await page.fill('#name', itemName);
+  await page.selectOption('#category', 'dress');
+  await page.fill('#pricePerDay', '60');
+  await page.fill('#sizes', 'L');
+  await page.fill('#color', 'rojo');
+  await page.fill('#style', 'party');
+  await page.fill('#images', '/images/dresses/delete.jpg');
+  await page.fill('#alt', 'delete test');
+  await page.fill('#description', 'To be deleted');
+  await page.fill('#stock', '3');
+
+  await page.getByRole('button', { name: /Crear Artículo/i }).click();
+  await page.waitForTimeout(1000);
+
+  // Verificar que existe
+  await expect(page.getByText(itemName)).toBeVisible();
+
+  // Configurar para aceptar confirm
   await page.evaluate(() => (window.confirm = () => true));
 
-  // Intercept delete and subsequent get
-  await page.route(`**/api/admin/items/${itemToDelete.id}`, (route, request) => {
-    if (request.method() === 'DELETE') {
-      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true }) });
-    } else {
-      route.continue();
-    }
-  });
-  await page.route('**/api/admin/items', (route) => {
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ items: [] }) });
-  });
-
-  const row = page.locator('tbody tr').filter({ hasText: itemToDelete.name }).first();
+  // Eliminar
+  const row = page.locator('tbody tr').filter({ hasText: itemName }).first();
   await row.getByRole('button', { name: /Eliminar/i }).click();
+  await page.waitForTimeout(1000);
 
-  // After deletion, item should not be visible
-  await expect(page.getByText(itemToDelete.name)).toHaveCount(0);
+  // Verificar eliminación
+  await expect(page.getByText(itemName)).not.toBeVisible();
 });

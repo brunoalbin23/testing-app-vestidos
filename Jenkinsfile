@@ -2,61 +2,56 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'mcr.microsoft.com/playwright:v1.56.1-jammy'
-        REPORT_DIR = 'playwright-report'
+        REPORT_DIR = "playwright-report"
     }
 
     stages {
         stage('Checkout') {
-            steps { checkout scm }
+            steps {
+                git url: 'https://github.com/brunoalbin23/testing-app-vestidos.git', branch: 'main'
+            }
         }
 
         stage('Install Dependencies') {
             steps {
-                script {
-                    docker.image(DOCKER_IMAGE).inside {
-                        sh 'npm ci'
-                    }
-                }
+                sh '''
+                npm ci
+                '''
             }
         }
 
         stage('Build App') {
             steps {
-                script {
-                    docker.image(DOCKER_IMAGE).inside {
-                        sh 'npm run build'
-                    }
-                }
+                sh '''
+                npm run build
+                '''
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
-                script {
-                    docker.image(DOCKER_IMAGE).inside {
-                        sh "npx playwright test --reporter=html"
-                        // Corregir CSP y sandbox
-                        sh """
-                        sed -i "s/default-src \\*/default-src * data:/g" ${REPORT_DIR}/index.html
-                        sed -i "s/sandbox=\\"[^\\"]*\\"//g" ${REPORT_DIR}/index.html
-                        """
-                    }
-                }
+                sh '''
+                npx playwright test --reporter=html --output=${REPORT_DIR} --reporter-options open=false
+                '''
             }
         }
     }
 
     post {
         always {
+            echo "Archiving Playwright report..."
             publishHTML([
-                allowMissing: false,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: REPORT_DIR,
+                reportName: 'Playwright Report',
+                reportDir: "${REPORT_DIR}",
                 reportFiles: 'index.html',
-                reportName: 'Playwright Report'
+                keepAll: true,
+                alwaysLinkToLastBuild: true,
+                allowMissing: true
             ])
+        }
+
+        failure {
+            echo "Pipeline falló"
         }
     }
 }

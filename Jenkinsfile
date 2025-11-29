@@ -2,20 +2,20 @@ pipeline {
   agent any
 
   stages {
-    stage('Install') {
-      steps {
-        sh 'npm ci'
-      }
-    }
 
-    stage('Playwright Tests (Docker)') {
+    stage('Install & Playwright Tests (Docker)') {
+      agent {
+        docker {
+          image 'mcr.microsoft.com/playwright:v1.48.0-jammy'
+          args '-u pwuser'
+        }
+      }
+
       steps {
         sh '''
-          docker run --rm \
-            -v "$PWD:/work" \
-            -w /work \
-            mcr.microsoft.com/playwright:v1.48.0-jammy \
-            bash -c "npm ci && npx playwright test"
+          npm ci
+          npx playwright install --with-deps
+          npx playwright test
         '''
       }
     }

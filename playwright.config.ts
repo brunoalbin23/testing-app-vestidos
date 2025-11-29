@@ -7,11 +7,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [
-    ['html', {
-      outputFolder: 'playwright-report',
-      open: 'never', // No abre el navegador automáticamente
-      embedAssets: true // <--- esto hace que el report sea self-contained
-    }]
+    ['html', { open: 'never' }]
   ],
 
   use: {
@@ -30,8 +26,8 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: 'npm run start',
+    command: 'npm run dev',
     url: 'http://localhost:3000',
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
   },
 });

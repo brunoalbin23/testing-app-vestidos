@@ -9,7 +9,7 @@ pipeline {
     stage('Playwright tests') {
       agent {
         docker {
-          image 'mcr.microsoft.com/playwright:v1.48.0-jammy'
+          image 'mcr.microsoft.com/playwright:v1.56.1-jammy'
           args '--ipc=host'
           reuseNode true
         }

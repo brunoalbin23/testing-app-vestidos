@@ -58,8 +58,7 @@ pipeline {
                     keepAll: true,
                     reportDir: 'playwright-report',
                     reportFiles: 'index.html',
-                    reportName: 'Playwright HTML Report',
-                    allowScripts: true
+                    reportName: 'Playwright HTML Report'
                 ])
             }
         }

@@ -1,8 +1,8 @@
 pipeline {
-  agent any
+  agent none
 
   stages {
-    stage('Playwright tests (Docker)') {
+    stage('Playwright tests') {
       agent {
         docker {
           image 'mcr.microsoft.com/playwright:v1.48.0-jammy'

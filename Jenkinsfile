@@ -2,12 +2,10 @@ pipeline {
     agent any
 
     environment {
-        NODE_VERSION = '20'
-        PLAYWRIGHT_REPORT_DIR = 'playwright-report'
+        NODE_ENV = 'production'
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -28,29 +26,38 @@ pipeline {
 
         stage('Run Playwright Tests') {
             steps {
-                // Ejecuta los tests con Playwright y genera reporte HTML
-                sh 'npx playwright test --reporter=html --output=$PLAYWRIGHT_REPORT_DIR'
+                script {
+                    // Usar la imagen oficial de Playwright
+                    docker.image('mcr.microsoft.com/playwright:v1.56.1-jammy').inside {
+                        // Instalar dependencias (por si no están)
+                        sh 'npm ci'
+                        // Correr tests y generar reporte HTML
+                        sh 'npx playwright test --reporter=html --output=playwright-report'
+                    }
+                }
             }
         }
     }
 
     post {
         always {
-            echo "Archiving Playwright report..."
+            echo 'Archiving Playwright report...'
             publishHTML([
-                allowMissing: false,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: "${PLAYWRIGHT_REPORT_DIR}",
+                reportDir: 'playwright-report',
                 reportFiles: 'index.html',
-                reportName: 'Playwright Report'
+                reportName: 'Playwright Report',
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true
             ])
         }
+
         success {
-            echo "Pipeline finalizó correctamente ✅"
+            echo 'Pipeline completado con éxito'
         }
+
         failure {
-            echo "Pipeline falló ❌"
+            echo 'Pipeline falló'
         }
     }
 }

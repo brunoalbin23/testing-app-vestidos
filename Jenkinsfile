@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'mcr.microsoft.com/playwright:v1.56.1-jammy'
+            args '-u 0:0' // correr como root dentro del contenedor
+        }
+    }
 
     environment {
         NODE_VERSION = '18'
@@ -26,13 +31,9 @@ pipeline {
 
         stage('Run Playwright Tests') {
             steps {
-                script {
-                    docker.image('mcr.microsoft.com/playwright:v1.56.1-jammy').inside {
-                        sh 'npm run start &'
-                        sh 'sleep 10'
-                        sh 'npx playwright test'
-                    }
-                }
+                sh 'npm run start &'
+                sh 'sleep 10'
+                sh 'npx playwright test --reporter=html'
             }
         }
     }

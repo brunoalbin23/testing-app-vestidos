@@ -12,16 +12,16 @@ pipeline {
           docker.image('mcr.microsoft.com/playwright:v1.56.1-jammy')
             .inside('--ipc=host -u 0:0') {
 
-              sh '''
-                echo "Node version:"
-                node -v
-
-                echo "Installing dependencies..."
-                npm ci
-
-                echo "Running Playwright tests..."
-                npx playwright test
-              '''
+              withEnv([
+                'PLAYWRIGHT_HTML_OPEN=never',
+                'CI=true'
+              ]) {
+                sh '''
+                  node -v
+                  npm ci
+                  npx playwright test
+                '''
+              }
 
               publishHTML([
                 reportName: 'Playwright Report',

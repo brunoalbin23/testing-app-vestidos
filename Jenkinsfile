@@ -1,16 +1,23 @@
 pipeline {
   agent none
 
+  options {
+    skipDefaultCheckout(true)
+  }
+
   stages {
     stage('Playwright tests') {
       agent {
         docker {
           image 'mcr.microsoft.com/playwright:v1.48.0-jammy'
-          args '--ipc=host -u pwuser'
+          args '--ipc=host'
+          reuseNode true
         }
       }
 
       steps {
+        checkout scm
+
         sh '''
           node -v
           npm -v

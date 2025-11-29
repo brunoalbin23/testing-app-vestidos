@@ -2,8 +2,7 @@ pipeline {
   agent any
 
   stages {
-
-    stage('Install & Playwright Tests (Docker)') {
+    stage('Playwright tests (Docker)') {
       agent {
         docker {
           image 'mcr.microsoft.com/playwright:v1.48.0-jammy'
@@ -13,8 +12,9 @@ pipeline {
 
       steps {
         sh '''
+          node -v
+          npm -v
           npm ci
-          npx playwright install --with-deps
           npx playwright test
         '''
       }
@@ -24,12 +24,12 @@ pipeline {
   post {
     always {
       publishHTML([
-        allowMissing: true,
-        alwaysLinkToLastBuild: true,
-        keepAll: true,
         reportDir: 'playwright-report',
         reportFiles: 'index.html',
-        reportName: 'Playwright Report'
+        reportName: 'Playwright Report',
+        allowMissing: true,
+        keepAll: true,
+        alwaysLinkToLastBuild: true
       ])
     }
   }

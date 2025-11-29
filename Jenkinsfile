@@ -2,11 +2,12 @@ pipeline {
     agent any
 
     environment {
-        NODE_ENV = 'production'
+        // Deshabilitar CSP para poder ver reportes HTML sin bloqueos
+        JAVA_OPTS = '-Dhudson.model.DirectoryBrowserSupport.CSP='
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout SCM') {
             steps {
                 checkout scm
             }
@@ -14,27 +15,23 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm ci'
+                echo 'Installing all dependencies (including devDependencies)...'
+                sh 'npm ci --include=dev'
             }
         }
 
         stage('Build App') {
             steps {
+                echo 'Building Next.js app...'
                 sh 'npm run build'
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
-                script {
-                    // Usar la imagen oficial de Playwright
-                    docker.image('mcr.microsoft.com/playwright:v1.56.1-jammy').inside {
-                        // Instalar dependencias (por si no están)
-                        sh 'npm ci'
-                        // Correr tests y generar reporte HTML
-                        sh 'npx playwright test --reporter=html --output=playwright-report'
-                    }
-                }
+                echo 'Running Playwright tests...'
+                // Usamos HTML reporter sin opciones adicionales
+                sh 'npx playwright test --reporter=html --output=playwright-report'
             }
         }
     }
@@ -43,21 +40,19 @@ pipeline {
         always {
             echo 'Archiving Playwright report...'
             publishHTML([
+                reportName: 'Playwright Report',
                 reportDir: 'playwright-report',
                 reportFiles: 'index.html',
-                reportName: 'Playwright Report',
+                keepAll: true,
                 allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true
+                alwaysLinkToLastBuild: true
             ])
         }
-
         success {
-            echo 'Pipeline completado con éxito'
+            echo 'Pipeline completed successfully!'
         }
-
         failure {
-            echo 'Pipeline falló'
+            echo 'Pipeline failed!'
         }
     }
 }

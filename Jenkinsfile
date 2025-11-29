@@ -8,28 +8,29 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install & Run Playwright Tests') {
             steps {
-                sh 'npm ci'
-            }
-        }
-
-        stage('Run Playwright Tests') {
-            steps {
-                sh 'npx playwright test --reporter=html'
+                // Usa la imagen oficial de Playwright con Node preinstalado
+                script {
+                    docker.image('mcr.microsoft.com/playwright:v1.56.1-jammy').inside {
+                        sh 'npm ci'                         // Instala dependencias
+                        sh 'npx playwright test --reporter=html'  // Corre tests
+                    }
+                }
             }
         }
     }
 
     post {
         always {
-            publishHTML([
-                allowMissing: false,                // si no encuentra el HTML, falla
-                alwaysLinkToLastBuild: true,        // siempre enlaza al último build
-                keepAll: true,                       // guarda todos los reportes
-                reportDir: 'playwright-report',      // carpeta donde Playwright genera el HTML
-                reportFiles: 'index.html',           // archivo HTML a publicar
-                reportName: 'Playwright Report'      // nombre visible en Jenkins
+            // Publica reporte HTML
+            publishHTML(target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'playwright-report',
+                reportFiles: 'index.html',
+                reportName: "Playwright Report"
             ])
         }
     }

@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - ./jenkins_home:/var/jenkins_home  # Persistencia de Jenkins
+      - /var/run/docker.sock:/var/run/docker.sock  # Para ejecutar Docker desde Jenkins
+      - ./playwright-ci:/var/jenkins_home/workspace/playwright-ci # Workspace
+    environment:
+      - JAVA_OPTS=-Dhudson.model.DirectoryBrowserSupport.CSP="sandbox allow-scripts; default-src *; style-src * http://* 'unsafe-inline' 'unsafe-eval'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'"
+
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    command: npm start

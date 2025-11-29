@@ -1,47 +1,59 @@
 pipeline {
-  agent any
+    agent any
 
-  options {
-    timestamps()
-  }
-
-  stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
+    environment {
+        NODE_VERSION = '22.20.0'
+        PLAYWRIGHT_DOCKER = 'mcr.microsoft.com/playwright:v1.56.1-jammy'
     }
 
-    stage('Playwright tests') {
-      steps {
-        script {
-          docker.image('mcr.microsoft.com/playwright:v1.56.1-jammy')
-            .inside('--ipc=host -u 0:0') {
+    options {
+        timestamps()
+    }
 
-            sh '''
-              node -v
-              npm ci
-              npx playwright test --reporter=html
-              ls -la playwright-report
-            '''
-          }
+    stages {
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
         }
-      }
-    }
-  }
 
-  post {
-    always {
-      publishHTML(target: [
-        allowMissing: false,
-        alwaysLinkToLastBuild: true,
-        keepAll: true,
-        reportDir: 'playwright-report',
-        reportFiles: 'index.html',
-        reportName: 'Playwright Report'
-      ])
+        stage('Install & Run Playwright Tests') {
+            steps {
+                script {
+                    // Correr todo dentro del contenedor de Playwright
+                    docker.image("${PLAYWRIGHT_DOCKER}").inside {
+                        sh '''
+                            echo "Node version:"
+                            node -v
+                            echo "Installing dependencies..."
+                            npm ci
 
-      archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
+                            echo "Running Playwright tests..."
+                            npx playwright test --reporter=html
+
+                            echo "Copying Playwright report to Jenkins workspace..."
+                            cp -r playwright-report $WORKSPACE/
+                        '''
+                    }
+                }
+            }
+        }
     }
-  }
+
+    post {
+        always {
+            echo "Archiving artifacts..."
+            archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
+
+            echo "Publishing HTML report..."
+            publishHTML(target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'playwright-report',
+                reportFiles: 'index.html',
+                reportName: 'Playwright HTML Report'
+            ])
+        }
+    }
 }

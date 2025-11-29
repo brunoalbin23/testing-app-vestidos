@@ -15,15 +15,17 @@ pipeline {
         stage('Install & Run Playwright Tests') {
             steps {
                 script {
-                    docker.image(DOCKER_IMAGE).inside('-u 0:0 --ipc=host') {
+                    // Revisar que Docker esté disponible
+                    sh "docker inspect -f . ${DOCKER_IMAGE} || echo 'Docker image available'"
+
+                    // Ejecutar tests dentro del contenedor
+                    docker.image(DOCKER_IMAGE).inside('-u 0:0 -w $WORKSPACE --ipc=host') {
                         sh '''
-                            echo "Node version:"
+                            echo Node version:
                             node -v
-                            
-                            echo "Installing dependencies..."
+                            echo Installing dependencies...
                             npm ci
-                            
-                            echo "Running Playwright tests..."
+                            echo Running Playwright tests...
                             npx playwright test --reporter=html
                         '''
                     }
@@ -34,37 +36,38 @@ pipeline {
         stage('Post Test Actions') {
             steps {
                 script {
-                    // Verifica que la carpeta del reporte exista
-                    sh '''
-                        if [ -d "playwright-report" ]; then
-                            echo "Playwright report exists"
-                            chmod -R 755 playwright-report
-                        else
-                            echo "ERROR: Playwright report not found"
-                            exit 1
-                        fi
-                    '''
+                    // Verificar que el reporte exista
+                    if (fileExists('playwright-report/index.html')) {
+                        echo "Playwright report exists"
+                    } else {
+                        error "Playwright report not found!"
+                    }
                 }
             }
         }
 
-        stage('Publish HTML Report') {
+        stage('Archive & Publish Report') {
             steps {
+                // Archivar artefactos
+                archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+
+                // Publicar reporte HTML con scripts permitidos
                 publishHTML([
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
-                    reportDir: 'playwright-report',    // carpeta generada por Playwright
+                    reportDir: 'playwright-report',
                     reportFiles: 'index.html',
-                    reportName: 'Playwright HTML Report'
+                    reportName: 'Playwright HTML Report',
+                    allowScripts: true
                 ])
             }
         }
+    }
 
-        stage('Archive Artifacts') {
-            steps {
-                archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
-            }
+    post {
+        always {
+            echo "Pipeline finished"
         }
     }
 }

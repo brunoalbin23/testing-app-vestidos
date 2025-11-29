@@ -6,7 +6,7 @@ pipeline {
       agent {
         docker {
           image 'mcr.microsoft.com/playwright:v1.48.0-jammy'
-          args '-u pwuser'
+          args '--ipc=host -u pwuser'
         }
       }
 
@@ -18,19 +18,19 @@ pipeline {
           npx playwright test
         '''
       }
-    }
-  }
 
-  post {
-    always {
-      publishHTML([
-        reportDir: 'playwright-report',
-        reportFiles: 'index.html',
-        reportName: 'Playwright Report',
-        allowMissing: true,
-        keepAll: true,
-        alwaysLinkToLastBuild: true
-      ])
+      post {
+        always {
+          publishHTML([
+            reportDir: 'playwright-report',
+            reportFiles: 'index.html',
+            reportName: 'Playwright Report',
+            allowMissing: true,
+            keepAll: true,
+            alwaysLinkToLastBuild: true
+          ])
+        }
+      }
     }
   }
 }

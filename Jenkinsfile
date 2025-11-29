@@ -1,19 +1,37 @@
 pipeline {
   agent any
 
+  options {
+    timestamps()
+  }
+
   stages {
     stage('Playwright tests') {
       steps {
         script {
-          docker.image('mcr.microsoft.com/playwright:v1.48.0-jammy')
-            .inside('--ipc=host') {
+          docker.image('mcr.microsoft.com/playwright:v1.56.1-jammy')
+            .inside('--ipc=host -u 0:0') {
 
               sh '''
+                echo "Node version:"
+                node -v
+
+                echo "Installing dependencies..."
                 npm ci
-                npx playwright install --with-deps
+
+                echo "Running Playwright tests..."
                 npx playwright test
               '''
-            }
+
+              publishHTML([
+                reportName: 'Playwright Report',
+                reportDir: 'playwright-report',
+                reportFiles: 'index.html',
+                keepAll: true,
+                alwaysLinkToLastBuild: true,
+                allowMissing: false
+              ])
+          }
         }
       }
     }
@@ -21,14 +39,7 @@ pipeline {
 
   post {
     always {
-      publishHTML([
-        reportDir: 'playwright-report',
-        reportFiles: 'index.html',
-        reportName: 'Playwright Report',
-        keepAll: true,
-        alwaysLinkToLastBuild: true,
-        allowMissing: true
-      ])
+      archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
     }
   }
 }

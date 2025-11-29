@@ -26,12 +26,12 @@ pipeline {
 
         stage('Run Playwright Tests') {
             steps {
-                // Levanta un contenedor con Playwright
-                docker.image('mcr.microsoft.com/playwright:v1.56.1-jammy').inside {
-                    // Corre los tests
-                    sh 'npm run start &'
-                    sh 'sleep 10' // espera que el servidor esté listo
-                    sh 'npx playwright test'
+                script {
+                    docker.image('mcr.microsoft.com/playwright:v1.56.1-jammy').inside {
+                        sh 'npm run start &'
+                        sh 'sleep 10'
+                        sh 'npx playwright test'
+                    }
                 }
             }
         }

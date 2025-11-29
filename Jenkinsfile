@@ -40,7 +40,15 @@ pipeline {
 
     post {
         always {
-            echo "Pipeline finished"
+            // Publicar el reporte de Playwright
+            publishHTML([
+                allowMissing: false,                 // Falla si no se encuentra el reporte
+                alwaysLinkToLastBuild: true,         // Siempre enlaza al último build
+                keepAll: true,                        // Mantiene todos los reportes
+                reportDir: 'playwright-report',       // Carpeta donde se generó el HTML
+                reportFiles: 'index.html',            // Archivo HTML a publicar
+                reportName: 'Playwright Report'       // Nombre que verá en Jenkins
+            ])
         }
     }
 }

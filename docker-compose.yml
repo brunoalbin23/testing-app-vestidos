@@ -2,7 +2,9 @@ version: "3.9"
 
 services:
   jenkins:
-    image: jenkins/jenkins:lts
+    build:
+      context: .
+      dockerfile: Dockerfile.jenkins  # tu Dockerfile donde instalas docker.io
     container_name: jenkins
     user: root
     ports:
@@ -11,12 +13,15 @@ services:
     volumes:
       - ./jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./playwright-ci:/var/jenkins_home/workspace/playwright-ci
     environment:
       - JAVA_OPTS=-Dhudson.model.DirectoryBrowserSupport.CSP="sandbox allow-scripts; default-src *; style-src * http://* 'unsafe-inline' 'unsafe-eval'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'"
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.app
     container_name: app
     ports:
       - "3000:3000"
+    volumes:
+      - .:/app

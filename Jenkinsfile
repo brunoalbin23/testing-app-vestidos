@@ -1,29 +1,58 @@
 pipeline {
     agent any
 
+    environment {
+        NODE_VERSION = '18'  // Ajusta según tu proyecto
+    }
+
     stages {
-        stage('Install & Test') {
-            agent {
-                docker { image 'mcr.microsoft.com/playwright:v1.56.1-jammy' }
+        stage('Checkout') {
+            steps {
+                checkout scm
             }
+        }
+
+        stage('Install Dependencies') {
             steps {
                 sh 'npm ci'
+            }
+        }
+
+        stage('Build App') {
+            steps {
                 sh 'npm run build'
-                sh 'npx playwright test --reporter=html --reporter-options=output=playwright-report,open=false'
+            }
+        }
+
+        stage('Run Playwright Tests') {
+            steps {
+                // Levanta un contenedor con Playwright
+                docker.image('mcr.microsoft.com/playwright:v1.56.1-jammy').inside {
+                    // Corre los tests
+                    sh 'npm run start &'
+                    sh 'sleep 10' // espera que el servidor esté listo
+                    sh 'npx playwright test'
+                }
             }
         }
     }
 
     post {
         always {
+            // Publica el HTML report en Jenkins
             publishHTML([
-                reportName: 'Playwright Report',
                 reportDir: 'playwright-report',
                 reportFiles: 'index.html',
-                keepAll: true,
-                alwaysLinkToLastBuild: true,
-                allowMissing: true
+                reportName: 'Playwright Report'
             ])
+        }
+
+        failure {
+            echo 'El pipeline falló'
+        }
+
+        success {
+            echo 'Pipeline completado con éxito'
         }
     }
 }

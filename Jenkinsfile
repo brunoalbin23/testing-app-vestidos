@@ -2,37 +2,34 @@ pipeline {
     agent any
 
     environment {
-        REPORT_DIR = "playwright-report"
+        NODE_VERSION = '20'
+        PLAYWRIGHT_REPORT_DIR = 'playwright-report'
     }
 
     stages {
+
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/brunoalbin23/testing-app-vestidos.git', branch: 'main'
+                checkout scm
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh '''
-                npm ci
-                '''
+                sh 'npm ci'
             }
         }
 
         stage('Build App') {
             steps {
-                sh '''
-                npm run build
-                '''
+                sh 'npm run build'
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
-                sh '''
-                npx playwright test --reporter=html --output=${REPORT_DIR} --reporter-options open=false
-                '''
+                // Ejecuta los tests con Playwright y genera reporte HTML
+                sh 'npx playwright test --reporter=html --output=$PLAYWRIGHT_REPORT_DIR'
             }
         }
     }
@@ -41,17 +38,19 @@ pipeline {
         always {
             echo "Archiving Playwright report..."
             publishHTML([
-                reportName: 'Playwright Report',
-                reportDir: "${REPORT_DIR}",
-                reportFiles: 'index.html',
-                keepAll: true,
+                allowMissing: false,
                 alwaysLinkToLastBuild: true,
-                allowMissing: true
+                keepAll: true,
+                reportDir: "${PLAYWRIGHT_REPORT_DIR}",
+                reportFiles: 'index.html',
+                reportName: 'Playwright Report'
             ])
         }
-
+        success {
+            echo "Pipeline finalizó correctamente ✅"
+        }
         failure {
-            echo "Pipeline falló"
+            echo "Pipeline falló ❌"
         }
     }
 }

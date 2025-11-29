@@ -7,7 +7,11 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [
-    ['html', { open: 'never' }]
+    ['html', {
+      outputFolder: 'playwright-report',
+      open: 'never', // No abre el navegador automáticamente
+      embedAssets: true // <--- esto hace que el report sea self-contained
+    }]
   ],
 
   use: {

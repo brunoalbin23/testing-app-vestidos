@@ -9,7 +9,7 @@ pipeline {
             steps {
                 sh 'npm ci'
                 sh 'npm run build'
-                sh 'npx playwright test --reporter=html'
+                sh 'npx playwright test --reporter=html --reporter-options=output=playwright-report,open=false'
             }
         }
     }

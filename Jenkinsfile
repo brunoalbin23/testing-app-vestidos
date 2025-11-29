@@ -6,31 +6,23 @@ pipeline {
   }
 
   stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
     stage('Playwright tests') {
       steps {
         script {
           docker.image('mcr.microsoft.com/playwright:v1.56.1-jammy')
             .inside('--ipc=host -u 0:0') {
 
-              withEnv([
-                'PLAYWRIGHT_HTML_OPEN=never',
-                'CI=true'
-              ]) {
-                sh '''
-                  node -v
-                  npm ci
-                  npx playwright test
-                '''
-              }
-
-              publishHTML([
-                reportName: 'Playwright Report',
-                reportDir: 'playwright-report',
-                reportFiles: 'index.html',
-                keepAll: true,
-                alwaysLinkToLastBuild: true,
-                allowMissing: false
-              ])
+            sh '''
+              node -v
+              npm ci
+              npx playwright test
+            '''
           }
         }
       }
@@ -39,7 +31,18 @@ pipeline {
 
   post {
     always {
-      archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+      // ✅ Publicar HTML report de Playwright
+      publishHTML(target: [
+        allowMissing: false,
+        alwaysLinkToLastBuild: true,
+        keepAll: true,
+        reportDir: 'playwright-report',
+        reportFiles: 'index.html',
+        reportName: 'Playwright Report'
+      ])
+
+      // ✅ Archivar el reporte como artefacto
+      archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
     }
   }
 }

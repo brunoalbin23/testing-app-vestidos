@@ -2,15 +2,13 @@ pipeline {
     agent any
 
     stages {
-        stage('Install & Run Playwright Tests') {
+        stage('Install & Test') {
             agent {
                 docker { image 'mcr.microsoft.com/playwright:v1.56.1-jammy' }
             }
             steps {
                 sh 'npm ci'
                 sh 'npm run build'
-                sh 'npm run start &'
-                sh 'sleep 10'
                 sh 'npx playwright test --reporter=html'
             }
         }

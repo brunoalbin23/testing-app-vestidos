@@ -8,9 +8,7 @@ pipeline {
 
     stages {
         stage('Checkout') {
-            steps {
-                checkout scm
-            }
+            steps { checkout scm }
         }
 
         stage('Install Dependencies') {
@@ -37,12 +35,11 @@ pipeline {
             steps {
                 script {
                     docker.image(DOCKER_IMAGE).inside {
-                        // Crear carpeta para reporte
-                        sh "mkdir -p ${REPORT_DIR}"
-                        // Modificar CSP del reporte HTML generado por Playwright
+                        sh "npx playwright test --reporter=html"
+                        // Corregir CSP y sandbox
                         sh """
-                        npx playwright test --reporter=html
                         sed -i "s/default-src \\*/default-src * data:/g" ${REPORT_DIR}/index.html
+                        sed -i "s/sandbox=\\"[^\\"]*\\"//g" ${REPORT_DIR}/index.html
                         """
                     }
                 }
@@ -52,7 +49,6 @@ pipeline {
 
     post {
         always {
-            // Publicar reporte HTML en Jenkins
             publishHTML([
                 allowMissing: false,
                 alwaysLinkToLastBuild: true,

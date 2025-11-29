@@ -20,7 +20,6 @@ pipeline {
         stage('Install & Run Playwright Tests') {
             steps {
                 script {
-                    // Correr todo dentro del contenedor de Playwright
                     docker.image("${PLAYWRIGHT_DOCKER}").inside {
                         sh '''
                             echo "Node version:"
@@ -30,9 +29,7 @@ pipeline {
 
                             echo "Running Playwright tests..."
                             npx playwright test --reporter=html
-
-                            echo "Copying Playwright report to Jenkins workspace..."
-                            cp -r playwright-report $WORKSPACE/
+                            # Ya no hace falta copiar, el contenedor comparte el workspace
                         '''
                     }
                 }
@@ -47,7 +44,7 @@ pipeline {
 
             echo "Publishing HTML report..."
             publishHTML(target: [
-                allowMissing: false,
+                allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
                 reportDir: 'playwright-report',

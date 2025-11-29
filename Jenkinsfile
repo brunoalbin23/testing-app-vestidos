@@ -21,7 +21,8 @@ pipeline {
             sh '''
               node -v
               npm ci
-              npx playwright test
+              npx playwright test --reporter=html
+              ls -la playwright-report
             '''
           }
         }
@@ -31,7 +32,6 @@ pipeline {
 
   post {
     always {
-      // ✅ Publicar HTML report de Playwright
       publishHTML(target: [
         allowMissing: false,
         alwaysLinkToLastBuild: true,
@@ -41,7 +41,6 @@ pipeline {
         reportName: 'Playwright Report'
       ])
 
-      // ✅ Archivar el reporte como artefacto
       archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
     }
   }

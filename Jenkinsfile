@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        NODE_VERSION = '18'  // Ajusta según tu proyecto
+        NODE_VERSION = '18'
     }
 
     stages {
@@ -39,20 +39,16 @@ pipeline {
 
     post {
         always {
-            // Publica el HTML report en Jenkins
             publishHTML([
                 reportDir: 'playwright-report',
                 reportFiles: 'index.html',
-                reportName: 'Playwright Report'
+                reportName: 'Playwright Report',
+                keepAll: true,
+                alwaysLinkToLastBuild: true,
+                allowMissing: false
             ])
         }
-
-        failure {
-            echo 'El pipeline falló'
-        }
-
-        success {
-            echo 'Pipeline completado con éxito'
-        }
+        failure { echo 'Pipeline falló' }
+        success { echo 'Pipeline completado con éxito' }
     }
 }

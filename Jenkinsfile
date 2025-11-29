@@ -10,18 +10,14 @@ pipeline {
 
         stage('Install & Run Playwright Tests') {
             steps {
-                // Instalar dependencias
-                sh 'npm ci'
-
-                // Build y start en background
-                sh 'npm run build'
-                sh 'npm run start &'
-
-                // Esperar unos segundos para que el server levante
-                sh 'sleep 10'
-
-                // Ejecutar los tests
-                sh 'npx playwright test --reporter=html'
+                // Usa la imagen oficial de Playwright (ya tiene Node)
+                docker.image('mcr.microsoft.com/playwright:v1.56.1-jammy').inside {
+                    sh 'npm ci'
+                    sh 'npm run build'
+                    sh 'npm run start &'
+                    sh 'sleep 10'
+                    sh 'npx playwright test --reporter=html'
+                }
             }
         }
     }

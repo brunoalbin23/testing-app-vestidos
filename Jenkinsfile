@@ -2,94 +2,71 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "mi-next-app"
-        IMAGE_TAG = "latest"
-        PLAYWRIGHT_IMAGE = "playwright-tests"
-        CONTAINER_NAME = "next-app-ci"
-        PORT = "3000"
+        DOCKER_IMAGE = 'mcr.microsoft.com/playwright:v1.56.1-jammy'
     }
 
     stages {
-
-        stage('Checkout') {
+        stage('Checkout SCM') {
             steps {
-                git branch: 'main', url: 'https://github.com/brunoalbin23/testing-app-vestidos'
+                checkout scm
             }
         }
 
-        stage('Build App Image') {
+        stage('Install & Run Playwright Tests') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                script {
+                    // Revisar que Docker esté disponible
+                    sh "docker inspect -f . ${DOCKER_IMAGE} || echo 'Docker image available'"
+
+                    // Ejecutar tests dentro del contenedor
+                    docker.image(DOCKER_IMAGE).inside('-u 0:0 -w $WORKSPACE --ipc=host') {
+                        sh '''
+                            echo Node version:
+                            node -v
+                            echo Installing dependencies...
+                            npm ci
+                            echo Running Playwright tests...
+                            npx playwright test --reporter=html
+                        '''
+                    }
+                }
             }
         }
 
-        stage('Run App Container') {
+        stage('Post Test Actions') {
             steps {
-                sh """
-                    docker rm -f ${CONTAINER_NAME} || true
-                    docker run -d --name ${CONTAINER_NAME} -p ${PORT}:3000 ${IMAGE_NAME}:${IMAGE_TAG}
-                """
+                script {
+                    // Verificar que el reporte exista
+                    if (fileExists('playwright-report/index.html')) {
+                        echo "Playwright report exists"
+                    } else {
+                        error "Playwright report not found!"
+                    }
+                }
             }
         }
 
-        stage('Wait for App') {
+        stage('Archive & Publish Report') {
             steps {
-                sh """
-                    echo "Esperando a que la app responda..."
-                    for i in {1..25}; do
-                      if curl -s http://localhost:${PORT} > /dev/null; then
-                        echo "App levantada!";
-                        exit 0;
-                      fi
-                      sleep 2
-                    done
-                    echo "ERROR: La app no respondió"
-                    docker logs ${CONTAINER_NAME}
-                    exit 1
-                """
-            }
-        }
+                // Archivar artefactos
+                archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
 
-        stage('Build Playwright Test Image') {
-            steps {
-                sh "docker build -t ${PLAYWRIGHT_IMAGE} -f Dockerfile.playwright ."
-            }
-        }
-
-        stage('Run Playwright Tests') {
-            steps {
-                sh """
-                    docker run --rm --network=host \
-                        ${PLAYWRIGHT_IMAGE}
-                """
-            }
-        }
-
-        stage('Archive Playwright Report') {
-            steps {
-                sh "mkdir -p playwright-report"
-                // Copiamos los reportes del contenedor al workspace
-                sh """
-                    docker create --name tmp ${PLAYWRIGHT_IMAGE}
-                    docker cp tmp:/app/playwright-report ./playwright-report
-                    docker rm tmp
-                """
+                // Publicar reporte HTML con scripts permitidos
+                publishHTML([
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'playwright-report',
+                    reportFiles: 'index.html',
+                    reportName: 'Playwright HTML Report'
+                ])
             }
         }
     }
 
     post {
         always {
-            echo "Limpiando contenedores..."
-            sh "docker rm -f ${CONTAINER_NAME} || true"
-
-            publishHTML(target: [
-                allowMissing: true,
-                keepAll: true,
-                reportDir: 'playwright-report',
-                reportFiles: 'index.html',
-                reportName: 'Playwright E2E Report'
-            ])
+            echo "Pipeline finished"
         }
     }
 }

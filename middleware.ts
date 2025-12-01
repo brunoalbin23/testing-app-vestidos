@@ -1,25 +1,35 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { verifyJWTToken } from '@/lib/jwt-auth';
 
-const CSRF_COOKIE = 'gr_csrf';
+const ADMIN_ROUTES = ['/admin', '/api/admin'];
 
 export function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+  const { pathname } = request.nextUrl;
   
-  // Establecer cookie CSRF si no existe
-  const csrfToken = request.cookies.get(CSRF_COOKIE);
-  if (!csrfToken) {
-    const newToken = crypto.randomUUID();
-    response.cookies.set(CSRF_COOKIE, newToken, {
-      httpOnly: false,
-      sameSite: 'lax',
-      secure: false, // Cambiado a false para desarrollo local
-      path: '/',
-      maxAge: 60 * 60 * 24 * 7, // 7 días
-    });
+  // Rutas públicas de admin (login)
+  const isLoginRoute = pathname === '/admin/login' || pathname === '/api/admin/login';
+  
+  // Rutas protegidas de admin
+  const isProtectedAdminRoute = ADMIN_ROUTES.some(route => pathname.startsWith(route)) && !isLoginRoute;
+  
+  if (isProtectedAdminRoute) {
+    const token = request.cookies.get('admin_token')?.value;
+    
+    if (!token || !verifyJWTToken(token)) {
+      // Redirigir a login si intenta acceder a rutas protegidas sin token válido
+      if (pathname.startsWith('/admin') && !pathname.includes('/login')) {
+        return NextResponse.redirect(new URL('/admin/login', request.url));
+      }
+      
+      // Para API, retornar 401
+      if (pathname.startsWith('/api/admin')) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+    }
   }
   
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {

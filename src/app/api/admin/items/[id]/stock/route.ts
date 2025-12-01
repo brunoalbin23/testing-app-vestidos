@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { isAdmin } from "@/lib/CsrfSessionManagement";
-import { updateItemStock, getItem } from "@/lib/RentalManagementSystem";
-import { verifyCsrfToken } from "@/lib/CsrfSessionManagement";
+import { isAdmin, verifyCsrfToken } from "@/lib/CsrfSessionManagement";
+import { updateItemStock } from "@/lib/RentalManagementSystem";
 
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!isAdmin()) {
+  const admin = await isAdmin();
+  if (!admin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -16,7 +16,7 @@ export async function PUT(
 
   const form = await req.formData();
   const csrf = form.get("csrf")?.toString() ?? null;
-  if (!(await verifyCsrfToken(csrf))) {
+  if (!verifyCsrfToken(csrf)) {
     return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
   }
 

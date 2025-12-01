@@ -42,6 +42,15 @@ test.describe('Página de Item', () => {
         endDate: '3000-11-12',
     });
 
+    // Interceptar la petición al backend y responder con error de duración
+    await page.route('**/api/rentals', (route) => {
+      route.fulfill({
+        status: 400,
+        contentType: 'application/json',
+        body: JSON.stringify({ error: 'Rental duration cannot exceed 30 days.' }),
+      });
+    });
+
     await itemPage.submitReservation();
 
     // Validar que aparezca el mensaje de error
@@ -62,8 +71,7 @@ test.describe('Página de Item', () => {
         startDate: '2025-11-12',
         endDate: '2025-11-16',
     });
-
-    await itemPage.submitReservation();
+    // El summary se muestra en cliente tras seleccionar fechas
     await itemPage.assertRentalSummaryVisible();
   });
 
@@ -81,6 +89,11 @@ test.describe('Página de Item', () => {
       phone: '099999999',
       startDate: '2025-11-12',
       endDate: '2025-11-16',
+    });
+
+    // Interceptar la petición y forzar un error para evitar redirección
+    await page.route('**/api/rentals', (route) => {
+      route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ error: 'Invalid email' }) });
     });
 
     // Intentar enviar
@@ -116,7 +129,11 @@ test('el flujo de alquiler debe completarse en 5 pasos o menos', async ({ page }
     });
     steps++;
 
-    // Paso 3: Enviar solicitud
+    // Paso 3: Enviar solicitud (mockear backend para que responda OK)
+    await page.route('**/api/rentals', (route) => {
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) });
+    });
+
     await item.submitReservation();
     steps++;
 

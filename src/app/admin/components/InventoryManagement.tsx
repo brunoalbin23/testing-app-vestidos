@@ -7,10 +7,9 @@ import StockUpdateForm from "./StockUpdateForm";
 
 type InventoryManagementProps = {
   initialItems: Item[];
-  csrf: string;
 };
 
-export default function InventoryManagement({ initialItems, csrf }: InventoryManagementProps) {
+export default function InventoryManagement({ initialItems }: InventoryManagementProps) {
   const [items, setItems] = useState<Item[]>(initialItems);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -18,12 +17,7 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
   useEffect(() => {
-    // Asegurarse de que la cookie CSRF esté establecida
-    fetch("/api/admin/csrf", {
-      credentials: 'include',
-    }).catch(() => {
-      // Silenciar errores, el middleware debería manejar esto
-    });
+    // No need for CSRF setup with JWT
   }, []);
 
   async function refreshItems() {
@@ -43,22 +37,8 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
 
     setDeletingId(id);
     try {
-      // Obtener el token CSRF de la cookie del navegador
-      function getCookie(name: string): string | null {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
-        return null;
-      }
-      
-      const cookieToken = getCookie('gr_csrf') || csrf;
-      
-      const formData = new FormData();
-      formData.append("csrf", cookieToken);
-
       const response = await fetch(`/api/admin/items/${id}`, {
         method: "DELETE",
-        body: formData,
         credentials: 'include',
       });
 
@@ -106,8 +86,8 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
   if (showCreateForm) {
     return (
       <div className="mt-6 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-900">
-        <h3 className="text-lg font-semibold mb-4">Create New Item</h3>
-        <ItemForm csrf={csrf} onSuccess={handleSuccess} onCancel={handleCancel} />
+        <h3 className="text-lg font-semibold mb-4">Crear Nuevo Artículo</h3>
+        <ItemForm onSuccess={handleSuccess} onCancel={handleCancel} />
       </div>
     );
   }
@@ -115,8 +95,8 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
   if (editingItem) {
     return (
       <div className="mt-6 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-900">
-        <h3 className="text-lg font-semibold mb-4">Edit Item: {editingItem.name}</h3>
-        <ItemForm item={editingItem} csrf={csrf} onSuccess={handleSuccess} onCancel={handleCancel} />
+        <h3 className="text-lg font-semibold mb-4">Editar Artículo: {editingItem.name}</h3>
+        <ItemForm item={editingItem} onSuccess={handleSuccess} onCancel={handleCancel} />
       </div>
     );
   }
@@ -126,14 +106,14 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
       <div className="flex items-center justify-between mb-4">
         <div>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            {items.length} {items.length === 1 ? "item" : "items"} in inventory
+            {items.length} {items.length === 1 ? "artículo" : "artículos"} en inventario
           </p>
         </div>
         <button
           onClick={handleCreate}
           className="px-4 py-2 rounded-xl bg-fuchsia-600 text-white text-sm font-medium hover:bg-fuchsia-500 transition-colors"
         >
-          + Add New Item
+          + Agregar Artículo
         </button>
       </div>
 
@@ -141,7 +121,6 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
         <div className="mb-6 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-900">
           <StockUpdateForm
             item={items.find((i) => i.id === updatingStockId)!}
-            csrf={csrf}
             onSuccess={handleSuccess}
             onCancel={handleCancel}
           />
@@ -153,12 +132,12 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
           <thead className="bg-slate-50 dark:bg-slate-800/50">
             <tr className="text-left">
               <th className="py-3 px-4 font-semibold">ID</th>
-              <th className="py-3 px-4 font-semibold">Name</th>
-              <th className="py-3 px-4 font-semibold">Category</th>
-              <th className="py-3 px-4 font-semibold">Sizes</th>
-              <th className="py-3 px-4 font-semibold">Price/day</th>
+              <th className="py-3 px-4 font-semibold">Nombre</th>
+              <th className="py-3 px-4 font-semibold">Categoría</th>
+              <th className="py-3 px-4 font-semibold">Tallas</th>
+              <th className="py-3 px-4 font-semibold">Precio/día</th>
               <th className="py-3 px-4 font-semibold">Stock</th>
-              <th className="py-3 px-4 font-semibold">Actions</th>
+              <th className="py-3 px-4 font-semibold">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -184,7 +163,7 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
                       onClick={() => handleEdit(item)}
                       className="px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700 text-xs hover:bg-slate-100 dark:hover:bg-slate-700"
                     >
-                      Edit
+                      Editar
                     </button>
                     <button
                       onClick={() => handleUpdateStock(item.id)}
@@ -197,7 +176,7 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
                       disabled={deletingId === item.id}
                       className="px-3 py-1 rounded-lg border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-xs hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50"
                     >
-                      {deletingId === item.id ? "Deleting..." : "Delete"}
+                      {deletingId === item.id ? "Eliminando..." : "Eliminar"}
                     </button>
                   </div>
                 </td>
@@ -206,7 +185,7 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
             {items.length === 0 && (
               <tr>
                 <td colSpan={7} className="py-8 text-center text-slate-500">
-                  No items in inventory. Click "Add New Item" to get started.
+                  Sin artículos en inventario. Haz clic en "Agregar Artículo" para comenzar.
                 </td>
               </tr>
             )}

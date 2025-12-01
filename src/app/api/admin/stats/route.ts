@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdmin } from "@/lib/CsrfSessionManagement";
+import { isAdmin } from "@/lib/jwt-auth";
 import { getSystemStats, getItemsWithUsageStats } from "@/lib/admin-service";
 
 export async function GET() {

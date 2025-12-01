@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdmin } from "@/lib/CsrfSessionManagement";
+import { isAdmin } from "@/lib/jwt-auth";
 import { listItems, listRentals, getItemRentals } from "@/lib/RentalManagementSystem";
 
 export async function GET() {

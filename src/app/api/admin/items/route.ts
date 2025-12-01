@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { isAdmin } from "@/lib/CsrfSessionManagement";
+import { isAdmin } from "@/lib/jwt-auth";
 import { createItem, listItems } from "@/lib/RentalManagementSystem";
-import { verifyCsrfToken } from "@/lib/CsrfSessionManagement";
 import type { Category } from "@/lib/types";
 
 export async function GET() {
@@ -20,11 +19,6 @@ export async function POST(req: Request) {
   }
 
   const form = await req.formData();
-  const csrf = form.get("csrf")?.toString() ?? null;
-  if (!verifyCsrfToken(csrf)) {
-    return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
-  }
-
   const name = form.get("name")?.toString().trim();
   const category = form.get("category")?.toString() as Category | undefined;
   const pricePerDay = Number(form.get("pricePerDay"));

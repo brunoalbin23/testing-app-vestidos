@@ -1,4 +1,4 @@
-import { isAdmin, getOrCreateCsrfToken } from "@/lib/CsrfSessionManagement";
+import { isAdmin } from "@/lib/jwt-auth";
 import { listItems, listRentals } from "@/lib/RentalManagementSystem";
 import { redirect } from "next/navigation";
 import InventoryManagement from "./components/InventoryManagement";
@@ -8,7 +8,6 @@ import FeaturesList from "./components/FeaturesList";
 export default async function Page() {
   const admin = await isAdmin();
   if (!admin) redirect("/admin/login");
-  const csrf = await getOrCreateCsrfToken();
 
   const items = listItems();
   const rentals = listRentals();
@@ -31,7 +30,7 @@ export default async function Page() {
 
       <section className="mt-10">
         <h2 className="text-xl font-semibold">Gestión de Inventario</h2>
-        <InventoryManagement initialItems={items} csrf={csrf} />
+        <InventoryManagement initialItems={items} />
       </section>
 
       <section className="mt-10">
@@ -67,7 +66,6 @@ export default async function Page() {
                         action={`/api/admin/rentals/${r.id}/cancel`}
                         method="POST"
                       >
-                        <input type="hidden" name="csrf" value={csrf} />
                         <button className="rounded-lg border px-3 py-1 hover:bg-slate-50 dark:hover:bg-slate-800">Cancelar</button>
                       </form>
                     ) : (

@@ -7,10 +7,9 @@ import StockUpdateForm from "./StockUpdateForm";
 
 type InventoryManagementProps = {
   initialItems: Item[];
-  csrf: string;
 };
 
-export default function InventoryManagement({ initialItems, csrf }: InventoryManagementProps) {
+export default function InventoryManagement({ initialItems }: InventoryManagementProps) {
   const [items, setItems] = useState<Item[]>(initialItems);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -18,12 +17,7 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
   useEffect(() => {
-    // Asegurarse de que la cookie CSRF esté establecida
-    fetch("/api/admin/csrf", {
-      credentials: 'include',
-    }).catch(() => {
-      // Silenciar errores, el middleware debería manejar esto
-    });
+    // No need for CSRF setup with JWT
   }, []);
 
   async function refreshItems() {
@@ -43,22 +37,8 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
 
     setDeletingId(id);
     try {
-      // Obtener el token CSRF de la cookie del navegador
-      function getCookie(name: string): string | null {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
-        return null;
-      }
-      
-      const cookieToken = getCookie('gr_csrf') || csrf;
-      
-      const formData = new FormData();
-      formData.append("csrf", cookieToken);
-
       const response = await fetch(`/api/admin/items/${id}`, {
         method: "DELETE",
-        body: formData,
         credentials: 'include',
       });
 
@@ -107,7 +87,7 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
     return (
       <div className="mt-6 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-900">
         <h3 className="text-lg font-semibold mb-4">Crear Nuevo Artículo</h3>
-        <ItemForm csrf={csrf} onSuccess={handleSuccess} onCancel={handleCancel} />
+        <ItemForm onSuccess={handleSuccess} onCancel={handleCancel} />
       </div>
     );
   }
@@ -116,7 +96,7 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
     return (
       <div className="mt-6 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-900">
         <h3 className="text-lg font-semibold mb-4">Editar Artículo: {editingItem.name}</h3>
-        <ItemForm item={editingItem} csrf={csrf} onSuccess={handleSuccess} onCancel={handleCancel} />
+        <ItemForm item={editingItem} onSuccess={handleSuccess} onCancel={handleCancel} />
       </div>
     );
   }
@@ -141,7 +121,6 @@ export default function InventoryManagement({ initialItems, csrf }: InventoryMan
         <div className="mb-6 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-900">
           <StockUpdateForm
             item={items.find((i) => i.id === updatingStockId)!}
-            csrf={csrf}
             onSuccess={handleSuccess}
             onCancel={handleCancel}
           />

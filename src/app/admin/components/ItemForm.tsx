@@ -2,16 +2,14 @@
 
 import { useState, FormEvent } from "react";
 import type { Item, Category } from "@/lib/types";
-import { getCookie, getCSRFToken } from "@/lib/admin-client";
 
 type ItemFormProps = {
   item?: Item;
-  csrf: string;
   onSuccess: () => void;
   onCancel: () => void;
 };
 
-export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormProps) {
+export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
   const [name, setName] = useState(item?.name || "");
   const [category, setCategory] = useState<Category>(item?.category || "dress");
   const [pricePerDay, setPricePerDay] = useState(item?.pricePerDay.toString() || "");
@@ -31,10 +29,7 @@ export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormPr
     setIsSubmitting(true);
 
     try {
-      const csrfToken = await getCSRFToken();
-      
       const formData = new FormData();
-      formData.append("csrf", csrfToken);
       formData.append("name", name.trim());
       formData.append("category", category);
       formData.append("pricePerDay", pricePerDay);

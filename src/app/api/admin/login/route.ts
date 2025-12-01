@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { setAdminSession } from "@/lib/CsrfSessionManagement";
-import { cookies } from "next/headers";
+import { setAdminSession } from "@/lib/jwt-auth";
 
 export async function POST(req: Request) {
   const form = await req.formData();
@@ -14,6 +13,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
 
-  await setAdminSession();
+  await setAdminSession(username);
   return NextResponse.redirect(new URL("/admin", req.url));
 }

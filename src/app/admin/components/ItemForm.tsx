@@ -5,11 +5,12 @@ import type { Item, Category } from "@/lib/types";
 
 type ItemFormProps = {
   item?: Item;
+  csrf: string;
   onSuccess: () => void;
   onCancel: () => void;
 };
 
-export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
+export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormProps) {
   const [name, setName] = useState(item?.name || "");
   const [category, setCategory] = useState<Category>(item?.category || "dress");
   const [pricePerDay, setPricePerDay] = useState(item?.pricePerDay.toString() || "");
@@ -29,7 +30,18 @@ export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
     setIsSubmitting(true);
 
     try {
+      // Obtener el token CSRF de la cookie del navegador
+      function getCookie(name: string): string | null {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+        return null;
+      }
+      
+      const cookieToken = getCookie('gr_csrf') || csrf;
+      
       const formData = new FormData();
+      formData.append("csrf", cookieToken);
       formData.append("name", name.trim());
       formData.append("category", category);
       formData.append("pricePerDay", pricePerDay);
@@ -76,7 +88,7 @@ export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium mb-1">
-            Nombre *
+            Name *
           </label>
           <input
             id="name"
@@ -90,7 +102,7 @@ export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
 
         <div>
           <label htmlFor="category" className="block text-sm font-medium mb-1">
-            Categoría *
+            Category *
           </label>
           <select
             id="category"
@@ -100,16 +112,16 @@ export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
             required
             className="w-full rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900"
           >
-            <option value="dress">Vestido</option>
-            <option value="shoes">Zapatos</option>
-            <option value="bag">Bolsa</option>
-            <option value="jacket">Chaqueta</option>
+            <option value="dress">Dress</option>
+            <option value="shoes">Shoes</option>
+            <option value="bag">Bag</option>
+            <option value="jacket">Jacket</option>
           </select>
         </div>
 
         <div>
           <label htmlFor="pricePerDay" className="block text-sm font-medium mb-1">
-            Precio por día ($) *
+            Price per day ($) *
           </label>
           <input
             id="pricePerDay"
@@ -126,7 +138,7 @@ export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
 
         <div>
           <label htmlFor="sizes" className="block text-sm font-medium mb-1">
-            Tallas (separadas por comas) *
+            Sizes (comma-separated) *
           </label>
           <input
             id="sizes"
@@ -155,7 +167,7 @@ export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
 
         <div>
           <label htmlFor="style" className="block text-sm font-medium mb-1">
-            Estilo (opcional)
+            Style (optional)
           </label>
           <input
             id="style"
@@ -168,7 +180,7 @@ export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
 
         <div>
           <label htmlFor="stock" className="block text-sm font-medium mb-1">
-            Cantidad en stock (opcional)
+            Stock quantity (optional)
           </label>
           <input
             id="stock"
@@ -183,7 +195,7 @@ export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
 
         <div>
           <label htmlFor="images" className="block text-sm font-medium mb-1">
-            Imágenes (rutas separadas por comas) *
+            Images (comma-separated paths) *
           </label>
           <input
             id="images"
@@ -199,7 +211,7 @@ export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
 
       <div>
         <label htmlFor="description" className="block text-sm font-medium mb-1">
-          Descripción *
+          Description *
         </label>
         <textarea
           id="description"
@@ -214,7 +226,7 @@ export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
 
       <div>
         <label htmlFor="alt" className="block text-sm font-medium mb-1">
-          Texto alternativo (para imágenes) *
+          Alt text (for images) *
         </label>
         <input
           id="alt"
@@ -233,14 +245,14 @@ export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
           disabled={isSubmitting}
           className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-sm hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
         >
-          Cancelar
+          Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
           className="px-4 py-2 rounded-xl bg-fuchsia-600 text-white text-sm font-medium hover:bg-fuchsia-500 disabled:opacity-50"
         >
-          {isSubmitting ? "Guardando..." : item ? "Actualizar Artículo" : "Crear Artículo"}
+          {isSubmitting ? "Saving..." : item ? "Update Item" : "Create Item"}
         </button>
       </div>
     </form>

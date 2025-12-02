@@ -5,11 +5,12 @@ import type { Item } from "@/lib/types";
 
 type StockUpdateFormProps = {
   item: Item;
+  csrf: string;
   onSuccess: () => void;
   onCancel: () => void;
 };
 
-export default function StockUpdateForm({ item, onSuccess, onCancel }: StockUpdateFormProps) {
+export default function StockUpdateForm({ item, csrf, onSuccess, onCancel }: StockUpdateFormProps) {
   const [stock, setStock] = useState(item.stock?.toString() || "0");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,7 +21,18 @@ export default function StockUpdateForm({ item, onSuccess, onCancel }: StockUpda
     setIsSubmitting(true);
 
     try {
+      // Obtener el token CSRF de la cookie del navegador
+      function getCookie(name: string): string | null {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+        return null;
+      }
+      
+      const cookieToken = getCookie('gr_csrf') || csrf;
+      
       const formData = new FormData();
+      formData.append("csrf", cookieToken);
       formData.append("stock", stock);
 
       const response = await fetch(`/api/admin/items/${item.id}/stock`, {

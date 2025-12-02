@@ -27,42 +27,42 @@ export class CatalogPage {
   }
 
   async assertCategorieOptions(expectedCategories: string[]) {
-    const optionsText = await this.page.locator('select[name="category"] option').allTextContents();
-    const options = optionsText.map((s) => s.trim());
+    const options = await this.page
+      .locator('select[name="category"] option')
+      .allTextContents();
 
-    for (const category of expectedCategories) {
-      const found = options.some(opt => opt.toLowerCase() === category.toLowerCase());
-      expect(found).toBe(true);
+    for (const categories of expectedCategories) {
+      expect(options).toContain(categories);
     }
   }
 
   async assertSizeOptions(expectedSizes: string[]) {
-    const optionsText = await this.page.locator('select[name="size"] option').allTextContents();
-    const options = optionsText.map((s) => s.trim());
+    const options = await this.page
+      .locator('select[name="size"] option')
+      .allTextContents();
 
     for (const size of expectedSizes) {
-      const found = options.some(opt => opt.toLowerCase() === size.toLowerCase());
-      expect(found).toBe(true);
+      expect(options).toContain(size);
     }
   }
 
   async assertColorOptions(expectedColor: string[]) {
-    const optionsText = await this.page.locator('select[name="color"] option').allTextContents();
-    const options = optionsText.map((s) => s.trim());
+    const options = await this.page
+      .locator('select[name="color"] option')
+      .allTextContents();
 
     for (const color of expectedColor) {
-      const found = options.some(opt => opt.toLowerCase() === color.toLowerCase());
-      expect(found).toBe(true);
+      expect(options).toContain(color);
     }
   }
 
   async assertStyleOptions(expectedStyle: string[]) {
-    const optionsText = await this.page.locator('select[name="style"] option').allTextContents();
-    const options = optionsText.map((s) => s.trim());
+    const options = await this.page
+      .locator('select[name="style"] option')
+      .allTextContents();
 
     for (const style of expectedStyle) {
-      const found = options.some(opt => opt.toLowerCase() === style.toLowerCase());
-      expect(found).toBe(true);
+      expect(options).toContain(style);
     }
   }
 

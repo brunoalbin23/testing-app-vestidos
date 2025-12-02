@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { isAdmin } from "@/lib/jwt-auth";
+import { isAdmin } from "@/lib/CsrfSessionManagement";
 import { createItem, listItems } from "@/lib/RentalManagementSystem";
+import { verifyCsrfToken } from "@/lib/CsrfSessionManagement";
 import type { Category } from "@/lib/types";
 
 export async function GET() {
-  const admin = await isAdmin();
-  if (!admin) {
+  if (!isAdmin()) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const items = listItems();
@@ -13,12 +13,16 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const admin = await isAdmin();
-  if (!admin) {
+  if (!isAdmin()) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const form = await req.formData();
+  const csrf = form.get("csrf")?.toString() ?? null;
+  if (!(await verifyCsrfToken(csrf))) {
+    return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
+  }
+
   const name = form.get("name")?.toString().trim();
   const category = form.get("category")?.toString() as Category | undefined;
   const pricePerDay = Number(form.get("pricePerDay"));

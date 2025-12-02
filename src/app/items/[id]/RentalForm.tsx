@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 type Props = {
   itemId: number;
+  csrf: string;
   pricePerDay: number;
 };
 
@@ -17,7 +18,7 @@ function calculateDaysDifference(startDate: string, endDate: string): number {
   return days > 0 ? days : 0;
 }
 
-export default function RentalForm({ itemId, pricePerDay }: Props) {
+export default function RentalForm({ itemId, csrf, pricePerDay }: Props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -41,6 +42,7 @@ export default function RentalForm({ itemId, pricePerDay }: Props) {
     try {
       const formData = new FormData();
       formData.append("itemId", itemId.toString());
+      formData.append("csrf", csrf);
       formData.append("name", name.trim());
       formData.append("email", email.trim());
       formData.append("phone", phone.trim());

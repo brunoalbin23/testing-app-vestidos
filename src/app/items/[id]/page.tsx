@@ -2,6 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import {getItem, getItemRentals} from "../../../../lib/RentalManagementSystem";
 import ItemCalendar from "./ItemCalendar";
+import {getOrCreateCsrfToken} from "../../../../lib/CsrfSessionManagement";
 import RentalForm from "./RentalForm";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { Key } from "react";
@@ -11,6 +12,8 @@ export default async function ItemDetail({params}: { params: Promise<{ id: strin
     const id = Number(idParam);
     const item = getItem(id);
     if (!item) return notFound();
+
+    const csrf = await getOrCreateCsrfToken();
 
     const booked = await getItemRentals(id);
 
@@ -49,7 +52,7 @@ export default async function ItemDetail({params}: { params: Promise<{ id: strin
 
           <div className="mt-10">
             <h2 className="font-semibold mb-3">Schedule a rental</h2>
-            <RentalForm itemId={id} pricePerDay={item.pricePerDay} />
+            <RentalForm itemId={id} csrf={csrf} pricePerDay={item.pricePerDay} />
           </div>
         </div>
       </div>

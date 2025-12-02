@@ -8,8 +8,7 @@ export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const admin = await isAdmin();
-  if (!admin) {
+  if (!isAdmin()) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -18,7 +17,7 @@ export async function PUT(
 
   const form = await req.formData();
   const csrf = form.get("csrf")?.toString() ?? null;
-  if (!verifyCsrfToken(csrf)) {
+  if (!(await verifyCsrfToken(csrf))) {
     return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
   }
 
@@ -63,8 +62,7 @@ export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const admin = await isAdmin();
-  if (!admin) {
+  if (!isAdmin()) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -73,7 +71,7 @@ export async function DELETE(
 
   const form = await req.formData();
   const csrf = form.get("csrf")?.toString() ?? null;
-  if (!verifyCsrfToken(csrf)) {
+  if (!(await verifyCsrfToken(csrf))) {
     return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
   }
 

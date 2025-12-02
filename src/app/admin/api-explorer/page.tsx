@@ -1,9 +1,10 @@
-import { isAdmin } from "@/lib/jwt-auth";
+import { isAdmin, getOrCreateCsrfToken } from "@/lib/CsrfSessionManagement";
 import { redirect } from "next/navigation";
 import APIExplorerComponent from "./components/APIExplorer";
 
 export default async function APIExplorer() {
-  if (!(await isAdmin())) redirect("/admin/login");
+  if (!isAdmin()) redirect("/admin/login");
+  const csrf = await getOrCreateCsrfToken();
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
@@ -125,10 +126,10 @@ export default async function APIExplorer() {
         <section className="rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
           <h2 className="text-lg font-semibold mb-4">Quick Test</h2>
           <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-            Your JWT token is stored in the <code className="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">admin_token</code> cookie.
+            Your current CSRF token: <code className="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">{csrf}</code>
           </p>
           <p className="text-xs text-slate-500">
-            Use tools like Postman, curl, or the browser console. The cookie will be sent automatically with requests.
+            You can use this token to make API requests. Use tools like Postman, curl, or the browser console.
           </p>
         </section>
 

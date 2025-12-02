@@ -141,7 +141,7 @@ test.describe('Página de Item', () => {
     const today = new Date();
 
     const startDate = new Date(today);
-    startDate.setDate(today.getDate() + 1);
+    startDate.setDate(today.getDate() + 6);
 
     const endDate = new Date(startDate);
     endDate.setDate(startDate.getDate() + 4);

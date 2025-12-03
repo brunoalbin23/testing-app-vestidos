@@ -40,9 +40,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-<<<<<<< HEAD
 jenkins_home/
-=======
-# data files (local persistence)
-/data/items.json
->>>>>>> parent of 04ce0b2 (Merge branch 'main' into feature/admin)

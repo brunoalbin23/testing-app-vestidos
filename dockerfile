@@ -1,9 +1,21 @@
-FROM jenkins/jenkins:lts
+# ---------- Build ----------
+FROM node:18 AS builder
 
-USER root
+WORKDIR /app
 
-RUN apt-get update && \
-    apt-get install -y docker.io && \
-    apt-get clean
+COPY package*.json ./
+RUN npm install
 
-USER jenkins
+COPY . .
+RUN npm run build   
+# Genera la carpeta .next
+
+# ---------- Run ----------
+FROM node:18
+
+WORKDIR /app
+
+COPY --from=builder /app ./
+
+EXPOSE 3000
+CMD ["npm", "start"]

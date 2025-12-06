@@ -68,27 +68,15 @@ export class ItemPage {
     startDate: string;
     endDate: string;
   }) {
-    // Asegurar que el formulario está visible antes de rellenar
-    await this.page.waitForSelector('#name', { timeout: 5000 });
-    await this.page.fill('#name', name);
-    await this.page.fill('#email', email);
-    await this.page.fill('#phone', phone);
-    await this.page.fill('#start', startDate);
-    await this.page.fill('#end', endDate);
-    // Pequeña espera para que se procese el cambio de fecha
-    await this.page.waitForTimeout(200);
+    await this.page.getByRole('textbox', { name: 'Full name' }).fill(name);
+    await this.page.getByRole('textbox', { name: 'Email' }).fill(email);
+    await this.page.getByRole('textbox', { name: 'Phone' }).fill(phone);
+    await this.page.getByRole('textbox', { name: 'Start date' }).fill(startDate);
+    await this.page.getByRole('textbox', { name: 'End date' }).fill(endDate);
   }
 
   async submitReservation() {
-    // Esperar a que el botón esté visible y clickeable
-    const button = this.page.getByRole('button', { name: 'Request rental' });
-    await button.waitFor({ state: 'visible' });
-    
-    // Click con espera para la navegación
-    await Promise.all([
-      this.page.waitForNavigation({ url: /success=1/ }).catch(() => null),
-      button.click(),
-    ]);
+    await this.page.getByRole('button', { name: 'Request rental' }).click();
   }
 
   async expectDurationError() {

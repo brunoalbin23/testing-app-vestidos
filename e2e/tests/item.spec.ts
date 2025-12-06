@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { HomePage } from '../pages/home-page';
 import { ItemPage } from '../pages/item-page';
+import { deleteRentalFromStorage, readRentals } from "./../../lib/storage";
 
 test.describe('Página de Item', () => {
     test('verifica que el calendario se muestre en los detalles del vestido', async ({ page }) => {
@@ -25,53 +26,72 @@ test.describe('Página de Item', () => {
     await itemPage.verifyMonthChanged(initialMonth);
   });
 
-  test('verificar que no se pueda alquilar por mas de 30 dias un vestido', async ({ page }) => {
+  test('verificar que no se pueda alquilar por más de 30 días un vestido', async ({ page }) => {
     const homePage = new HomePage(page);
     const itemPage = new ItemPage(page);
 
-    // Ir al home y abrir un item
+    // Fechas dinámicas
+    const today = new Date();
+
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() + 1);
+
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 31); //más de 30 días
+
+    const formatDate = (date: Date) =>
+      date.toISOString().split('T')[0];
+
+    // Ir al home y abrir un ítem
     await homePage.goto();
     await homePage.clickFirstItemDetails();
 
-    // Completar el formulario con fechas inválidas
+    // Completar formulario con rango inválido
     await itemPage.fillReservationForm({
-        name: 'pepito',
-        email: 'pepito@gmail.com',
-        phone: '099999999',
-        startDate: '2025-11-12',
-        endDate: '3000-11-12',
-    });
-
-    // Interceptar la petición al backend y responder con error de duración
-    await page.route('**/api/rentals', (route) => {
-      route.fulfill({
-        status: 400,
-        contentType: 'application/json',
-        body: JSON.stringify({ error: 'Rental duration cannot exceed 30 days.' }),
-      });
+      name: 'pepito',
+      email: 'pepito@gmail.com',
+      phone: '099999999',
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
     });
 
     await itemPage.submitReservation();
 
-    // Validar que aparezca el mensaje de error
+    // Validar regla de negocio
     await itemPage.expectDurationError();
+
+    // Refuerzo: no debería navegar a success
+    await expect(page).not.toHaveURL(/success=1/);
   });
 
   test('debería mostrar el costo del alquiler al seleccionar un rango de fechas', async ({ page }) => {
     const homePage = new HomePage(page);
     const itemPage = new ItemPage(page);
 
+    //Generar fechas dinámicas
+    const today = new Date();
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() + 1); // mañana
+
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 4); // 4 días de alquiler
+
+    //Formatear a YYYY-MM-DD
+    const formatDate = (date: Date) =>
+      date.toISOString().split('T')[0];
+
     await homePage.goto();
     await homePage.clickFirstItemDetails();
 
     await itemPage.fillReservationForm({
-        name: 'pepito',
-        email: 'pepito@gmail.com',
-        phone: '099999999',
-        startDate: '2025-11-12',
-        endDate: '2025-11-16',
+      name: 'pepito',
+      email: 'pepito@gmail.com',
+      phone: '099999999',
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
     });
-    // El summary se muestra en cliente tras seleccionar fechas
+
+    await itemPage.submitReservation();
     await itemPage.assertRentalSummaryVisible();
   });
 
@@ -79,70 +99,91 @@ test.describe('Página de Item', () => {
     const homePage = new HomePage(page);
     const itemPage = new ItemPage(page);
 
+    // Fechas dinámicas válidas
+    const today = new Date();
+
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() + 1);
+
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 4);
+
+    const formatDate = (date: Date) =>
+      date.toISOString().split('T')[0];
+
+    // Navegar
     await homePage.goto();
     await homePage.clickFirstItemDetails();
 
     // Completar formulario con email inválido
     await itemPage.fillReservationForm({
       name: 'pepito',
-      email: 'pepito@', // email inválido
+      email: 'pepito@', //inválido
       phone: '099999999',
-      startDate: '2025-11-12',
-      endDate: '2025-11-16',
-    });
-
-    // Interceptar la petición y forzar un error para evitar redirección
-    await page.route('**/api/rentals', (route) => {
-      route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ error: 'Invalid email' }) });
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
     });
 
     // Intentar enviar
     await itemPage.submitReservation();
 
-    // Esperar un tiempo prudencial por si intenta navegar
-    await page.waitForTimeout(500);
-
-    // Validar que NO navega a success=1
+    // Validación correcta: NO hay redirección por éxito
     await expect(page).not.toHaveURL(/success=1/);
+
   });
 
-test('el flujo de alquiler debe completarse en 5 pasos o menos', async ({ page }) => {
+  test('el flujo de alquiler debe completarse en 5 pasos o menos', async ({ page }) => {
     const home = new HomePage(page);
     const item = new ItemPage(page);
 
     let steps = 0;
 
-    // NO cuenta como paso → solo navegar al home
+    //Fechas dinámicas
+    const today = new Date();
+
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() + 10);
+
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 4);
+
+    const formatDate = (date: Date) =>
+      date.toISOString().split('T')[0];
+
+    //NO cuenta como paso → acceso al home
     await home.goto();
 
-    // Paso 1: Abrir detalles del primer item
+    //Paso 1: Abrir detalles del primer ítem
     await home.clickFirstItemDetails();
     steps++;
 
-    // Paso 2: Completar formulario
+    //Paso 2: Completar formulario
     await item.fillReservationForm({
       name: 'pepito',
       email: 'pepito@gmail.com',
       phone: '099999999',
-      startDate: '2025-11-26',
-      endDate: '2025-11-27',
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
     });
     steps++;
 
-    // Paso 3: Enviar solicitud (mockear backend para que responda OK)
-    await page.route('**/api/rentals', (route) => {
-      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) });
-    });
-
+    //Paso 3: Enviar solicitud
     await item.submitReservation();
     steps++;
 
-    // Paso 4: Confirmación (success=1)
+    //Paso 4: Confirmación exitosa
     await expect(page).toHaveURL(/success=1/);
     steps++;
 
-    // Validar que NO supere los 5 pasos
+    //Regla UX: 5 pasos o menos
     expect(steps).toBeLessThanOrEqual(5);
+
+    //borrar el ultimo rental para no ensuciar el rentals.json :)
+    var rentals = readRentals();
+    rentals = rentals.slice().sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    const latestRental = rentals[0];
+    const borrado = deleteRentalFromStorage(latestRental.id)
+    expect(borrado).toBe(true);
   });
 
 });

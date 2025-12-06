@@ -62,11 +62,15 @@ export default async function Page() {
                   <td className="py-2 pr-4 capitalize">{r.status === "active" ? "Activo" : "Cancelado"}</td>
                   <td className="py-2 pr-4">
                     {r.status === "active" ? (
-                      <form
-                        action={`/api/admin/rentals/${r.id}/cancel`}
-                        method="POST"
-                      >
-                        <button className="rounded-lg border px-3 py-1 hover:bg-slate-50 dark:hover:bg-slate-800">Cancelar</button>
+                      <form action="/api/admin/rentals" method="POST">
+                        <input type="hidden" name="id" value={r.id} />
+                        <input type="hidden" name="action" value="cancel" />
+                        
+                        <button
+                          className="rounded-lg border px-3 py-1 hover:bg-slate-50 dark:hover:bg-slate-800"
+                        >
+                          Cancelar
+                        </button>
                       </form>
                     ) : (
                       <span className="text-slate-400">—</span>

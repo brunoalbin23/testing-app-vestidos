@@ -43,7 +43,11 @@ export class HomePage {
 
   async subscribeToNewsletter(email: string) {
     await this.page.getByRole('textbox', { name: 'Email' }).fill(email);
-    await this.page.getByRole('button', { name: 'Subscribe' }).click();
+    // Espera explícitamente el redirect (303)
+    await Promise.all([
+      this.page.waitForNavigation(),
+      this.page.getByRole('button', { name: 'Subscribe' }).click(),
+    ]);
   }
 
   async clickBecomeLender() {

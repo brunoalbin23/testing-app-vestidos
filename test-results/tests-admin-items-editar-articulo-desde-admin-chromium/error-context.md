@@ -1,0 +1,226 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "GlamRent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Browse" [ref=e6] [cursor=pointer]:
+          - /url: /search
+        - link "How it works" [ref=e7] [cursor=pointer]:
+          - /url: /#how
+        - link "Featured" [ref=e8] [cursor=pointer]:
+          - /url: /#featured
+        - link "FAQ" [ref=e9] [cursor=pointer]:
+          - /url: /faq
+      - generic [ref=e10]:
+        - link "Admin" [ref=e11] [cursor=pointer]:
+          - /url: /admin/login
+        - link "Become a lender" [ref=e12] [cursor=pointer]:
+          - /url: /become-a-lender
+  - generic [ref=e13]:
+    - generic [ref=e14]:
+      - heading "Export" [level=1] [ref=e15]
+      - button "Cerrar sesión" [ref=e18]
+    - generic [ref=e19]:
+      - heading "Estadísticas del Dashboard" [level=2] [ref=e20]
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - paragraph [ref=e24]: Total de Artículos
+            - paragraph [ref=e25]: "40"
+          - generic [ref=e26]:
+            - paragraph [ref=e27]: Alquileres Activos
+            - paragraph [ref=e28]: "4"
+          - generic [ref=e29]:
+            - paragraph [ref=e30]: Ingresos Totales
+            - paragraph [ref=e31]: $515.00
+          - generic [ref=e32]:
+            - paragraph [ref=e33]: Duración Promedio
+            - paragraph [ref=e34]: 2 días
+        - generic [ref=e35]:
+          - generic [ref=e36]:
+            - heading "Artículos Más Alquilados" [level=3] [ref=e37]
+            - generic [ref=e38]:
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - paragraph [ref=e41]: Silk Evening Gown
+                  - paragraph [ref=e42]: dress
+                - generic [ref=e43]: 5 alquileres
+              - generic [ref=e44]:
+                - generic [ref=e45]:
+                  - paragraph [ref=e46]: Vestido para Eliminar 1765026734191
+                  - paragraph [ref=e47]: dress
+                - generic [ref=e48]: 1 alquileres
+              - generic [ref=e49]:
+                - generic [ref=e50]:
+                  - paragraph [ref=e51]: Black Tie Dress
+                  - paragraph [ref=e52]: dress
+                - generic [ref=e53]: 0 alquileres
+              - generic [ref=e54]:
+                - generic [ref=e55]:
+                  - paragraph [ref=e56]: Floral Midi Dress
+                  - paragraph [ref=e57]: dress
+                - generic [ref=e58]: 0 alquileres
+              - generic [ref=e59]:
+                - generic [ref=e60]:
+                  - paragraph [ref=e61]: Velvet Cocktail Dress
+                  - paragraph [ref=e62]: dress
+                - generic [ref=e63]: 0 alquileres
+          - generic [ref=e64]:
+            - heading "Artículos con Mayor Ingreso" [level=3] [ref=e65]
+            - generic [ref=e66]:
+              - generic [ref=e67]:
+                - generic [ref=e68]:
+                  - paragraph [ref=e69]: Silk Evening Gown
+                  - paragraph [ref=e70]: $79/día
+                - generic [ref=e71]: $395.00
+              - generic [ref=e72]:
+                - generic [ref=e73]:
+                  - paragraph [ref=e74]: Vestido para Eliminar 1765026734191
+                  - paragraph [ref=e75]: $60/día
+                - generic [ref=e76]: $120.00
+              - generic [ref=e77]:
+                - generic [ref=e78]:
+                  - paragraph [ref=e79]: Black Tie Dress
+                  - paragraph [ref=e80]: $99/día
+                - generic [ref=e81]: $0.00
+              - generic [ref=e82]:
+                - generic [ref=e83]:
+                  - paragraph [ref=e84]: Floral Midi Dress
+                  - paragraph [ref=e85]: $49/día
+                - generic [ref=e86]: $0.00
+              - generic [ref=e87]:
+                - generic [ref=e88]:
+                  - paragraph [ref=e89]: Velvet Cocktail Dress
+                  - paragraph [ref=e90]: $59/día
+                - generic [ref=e91]: $0.00
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - paragraph [ref=e94]: Exportar Datos
+            - paragraph [ref=e95]: Descargar todos los artículos y alquileres como JSON
+          - button "Exportar" [ref=e96]
+    - generic [ref=e97]:
+      - heading "Gestión de Inventario" [level=2] [ref=e98]
+      - generic [ref=e99]:
+        - 'heading "Editar Artículo: Vestido para Editar 1765037376070" [level=3] [ref=e100]'
+        - generic [ref=e101]:
+          - paragraph [ref=e103]: Unauthorized
+          - generic [ref=e104]:
+            - generic [ref=e105]:
+              - generic [ref=e106]: Nombre *
+              - textbox "Nombre *" [ref=e107]: Vestido Editado 1765037376070
+            - generic [ref=e108]:
+              - generic [ref=e109]: Categoría *
+              - combobox "Categoría *" [ref=e110]:
+                - option "Vestido" [selected]
+                - option "Zapatos"
+                - option "Bolsa"
+                - option "Chaqueta"
+            - generic [ref=e111]:
+              - generic [ref=e112]: Precio por día ($) *
+              - spinbutton "Precio por día ($) *" [ref=e113]: "75"
+            - generic [ref=e114]:
+              - generic [ref=e115]: Tallas (separadas por comas) *
+              - textbox "Tallas (separadas por comas) *" [ref=e116]:
+                - /placeholder: XS, S, M, L, XL
+                - text: M
+            - generic [ref=e117]:
+              - generic [ref=e118]: Color *
+              - textbox "Color *" [ref=e119]: negro
+            - generic [ref=e120]:
+              - generic [ref=e121]: Estilo (opcional)
+              - textbox "Estilo (opcional)" [ref=e122]: formal
+            - generic [ref=e123]:
+              - generic [ref=e124]: Cantidad en stock (opcional)
+              - spinbutton "Cantidad en stock (opcional)" [ref=e125]: "5"
+            - generic [ref=e126]:
+              - generic [ref=e127]: Imágenes (rutas separadas por comas) *
+              - textbox "Imágenes (rutas separadas por comas) *" [ref=e128]:
+                - /placeholder: /images/dresses/example.jpg
+                - text: /images/dresses/edit.jpg
+          - generic [ref=e129]:
+            - generic [ref=e130]: Descripción *
+            - textbox "Descripción *" [ref=e131]: Description
+          - generic [ref=e132]:
+            - generic [ref=e133]: Texto alternativo (para imágenes) *
+            - textbox "Texto alternativo (para imágenes) *" [ref=e134]: edit test
+          - generic [ref=e135]:
+            - button "Cancelar" [ref=e136]
+            - button "Actualizar Artículo" [ref=e137]
+    - generic [ref=e138]:
+      - heading "Alquileres Programados" [level=2] [ref=e139]
+      - table [ref=e141]:
+        - rowgroup [ref=e142]:
+          - row "ID Alquiler Artículo Fechas Cliente Estado Acciones" [ref=e143]:
+            - cell "ID Alquiler" [ref=e144]
+            - cell "Artículo" [ref=e145]
+            - cell "Fechas" [ref=e146]
+            - cell "Cliente" [ref=e147]
+            - cell "Estado" [ref=e148]
+            - cell "Acciones" [ref=e149]
+        - rowgroup [ref=e150]:
+          - row "5ef0dfda 1 2025-11-12 → 2025-11-16 pepito pepito@gmail.com • 099999999 Cancelado —" [ref=e151]:
+            - cell "5ef0dfda" [ref=e152]
+            - cell "1" [ref=e153]
+            - cell "2025-11-12 → 2025-11-16" [ref=e154]
+            - cell "pepito pepito@gmail.com • 099999999" [ref=e155]:
+              - text: pepito
+              - generic [ref=e156]: pepito@gmail.com • 099999999
+            - cell "Cancelado" [ref=e157]
+            - cell "—" [ref=e158]
+          - row "37e67235 1 2025-12-15 → 2025-12-17 Test User Flow testflow@example.com • 1234567890 Cancelado —" [ref=e159]:
+            - cell "37e67235" [ref=e160]
+            - cell "1" [ref=e161]
+            - cell "2025-12-15 → 2025-12-17" [ref=e162]
+            - cell "Test User Flow testflow@example.com • 1234567890" [ref=e163]:
+              - text: Test User Flow
+              - generic [ref=e164]: testflow@example.com • 1234567890
+            - cell "Cancelado" [ref=e165]
+            - cell "—" [ref=e166]
+          - row "704b8cc6 1 2025-12-10 → 2025-12-12 Test User Flow testflow@example.com • 1234567890 Activo Cancelar" [ref=e167]:
+            - cell "704b8cc6" [ref=e168]
+            - cell "1" [ref=e169]
+            - cell "2025-12-10 → 2025-12-12" [ref=e170]
+            - cell "Test User Flow testflow@example.com • 1234567890" [ref=e171]:
+              - text: Test User Flow
+              - generic [ref=e172]: testflow@example.com • 1234567890
+            - cell "Activo" [ref=e173]
+            - cell "Cancelar" [ref=e174]:
+              - button "Cancelar" [ref=e176]
+          - row "33c31cf0 1 2025-12-01 → 2025-12-03 Test User test@example.com • 1234567890 Activo Cancelar" [ref=e177]:
+            - cell "33c31cf0" [ref=e178]
+            - cell "1" [ref=e179]
+            - cell "2025-12-01 → 2025-12-03" [ref=e180]
+            - cell "Test User test@example.com • 1234567890" [ref=e181]:
+              - text: Test User
+              - generic [ref=e182]: test@example.com • 1234567890
+            - cell "Activo" [ref=e183]
+            - cell "Cancelar" [ref=e184]:
+              - button "Cancelar" [ref=e186]
+          - row "6705a7c6 1 2025-11-26 → 2025-11-27 pepito pepito@gmail.com • 099999999 Activo Cancelar" [ref=e187]:
+            - cell "6705a7c6" [ref=e188]
+            - cell "1" [ref=e189]
+            - cell "2025-11-26 → 2025-11-27" [ref=e190]
+            - cell "pepito pepito@gmail.com • 099999999" [ref=e191]:
+              - text: pepito
+              - generic [ref=e192]: pepito@gmail.com • 099999999
+            - cell "Activo" [ref=e193]
+            - cell "Cancelar" [ref=e194]:
+              - button "Cancelar" [ref=e196]
+          - row "8b1cb906 7 2025-11-27 → 2025-11-29 Bruno Albín albinbruno23@gmail.com • 091697659 Activo Cancelar" [ref=e197]:
+            - cell "8b1cb906" [ref=e198]
+            - cell "7" [ref=e199]
+            - cell "2025-11-27 → 2025-11-29" [ref=e200]
+            - cell "Bruno Albín albinbruno23@gmail.com • 091697659" [ref=e201]:
+              - text: Bruno Albín
+              - generic [ref=e202]: albinbruno23@gmail.com • 091697659
+            - cell "Activo" [ref=e203]
+            - cell "Cancelar" [ref=e204]:
+              - button "Cancelar" [ref=e206]
+  - button "Open Next.js Dev Tools" [ref=e212] [cursor=pointer]:
+    - img [ref=e213]
+  - alert [ref=e216]
+```

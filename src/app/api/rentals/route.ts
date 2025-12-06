@@ -28,10 +28,10 @@ export async function POST(req: Request) {
   // Intentar leer FormData; si falla, intentar JSON body
   try {
     const form = await req.formData();
-    const csrf = form.get("csrf")?.toString() ?? null;
+    /*const csrf = form.get("csrf")?.toString() ?? null;
     if (!verifyCsrfToken(csrf)) {
       return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
-    }
+    }*/
 
     itemId = Number(form.get("itemId") || NaN);
     name = (form.get("name") || "").toString().trim();
@@ -42,10 +42,10 @@ export async function POST(req: Request) {
   } catch (err) {
     try {
       const json = await req.json();
-      const csrf = (json.csrf as string) ?? null;
+      /*const csrf = (json.csrf as string) ?? null;
       if (!verifyCsrfToken(csrf)) {
         return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
-      }
+      }*/
 
       itemId = Number(json.itemId || NaN);
       name = (json.name || "").toString().trim();

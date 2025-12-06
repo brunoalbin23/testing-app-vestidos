@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     const redirectUrl = new URL("/", url.origin);
     redirectUrl.searchParams.set("newsletter", "success");
 
-    return NextResponse.redirect(redirectUrl);
+    return NextResponse.redirect(redirectUrl, { status: 303 });
   } catch (error) {
     console.error("Newsletter subscription error:", error);
     return NextResponse.json(

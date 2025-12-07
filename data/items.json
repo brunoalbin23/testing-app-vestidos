@@ -72,58 +72,5 @@
       "/images/dresses/velvet-cocktail-dress.jpg"
     ],
     "alt": "Velvet cocktail dress in deep tones"
-  },
-  {
-    "id": 5,
-    "name": "Vestido Test E2E 1765115367154",
-    "category": "dress",
-    "pricePerDay": 45,
-    "sizes": [
-      "S",
-      "M",
-      "L"
-    ],
-    "color": "azul",
-    "style": "casual",
-    "description": "Un vestido de prueba E2E",
-    "images": [
-      "/images/dresses/test.jpg"
-    ],
-    "alt": "Test dress",
-    "stock": 10
-  },
-  {
-    "id": 6,
-    "name": "Vestido para Eliminar 1765115367178",
-    "category": "dress",
-    "pricePerDay": 60,
-    "sizes": [
-      "L"
-    ],
-    "color": "rojo",
-    "style": "party",
-    "description": "To be deleted",
-    "images": [
-      "/images/dresses/delete.jpg"
-    ],
-    "alt": "delete test",
-    "stock": 3
-  },
-  {
-    "id": 7,
-    "name": "Vestido para Editar 1765115367655",
-    "category": "dress",
-    "pricePerDay": 50,
-    "sizes": [
-      "M"
-    ],
-    "color": "negro",
-    "style": "formal",
-    "description": "Description",
-    "images": [
-      "/images/dresses/edit.jpg"
-    ],
-    "alt": "edit test",
-    "stock": 5
   }
 ]

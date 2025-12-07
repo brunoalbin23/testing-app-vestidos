@@ -100,7 +100,7 @@
           - generic [ref=e92]:
             - generic [ref=e93]:
               - generic [ref=e94]: Nombre *
-              - textbox "Nombre *" [ref=e95]: Vestido para Editar 1765118871538
+              - textbox "Nombre *" [ref=e95]: Vestido Test E2E 1765118871471
             - generic [ref=e96]:
               - generic [ref=e97]: Categoría *
               - combobox "Categoría *" [ref=e98]:
@@ -110,7 +110,7 @@
                 - option "Chaqueta"
             - generic [ref=e99]:
               - generic [ref=e100]: Precio por día ($) *
-              - spinbutton "Precio por día ($) *" [active] [ref=e101]: "50"
+              - spinbutton "Precio por día ($) *" [active] [ref=e101]: "45"
             - generic [ref=e102]:
               - generic [ref=e103]: Tallas *
               - generic [ref=e104]:

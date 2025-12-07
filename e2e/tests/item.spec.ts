@@ -4,16 +4,19 @@ import { ItemPage } from '../pages/item-page';
 import { deleteRentalFromStorage, readRentals } from "./../../lib/storage";
 
 test.describe('Página de Item', () => {
-    test('verifica que el calendario se muestre en los detalles del vestido', async ({ page }) => {
+  test('verifica que el calendario se muestre en los detalles del vestido', async ({ page }) => {
     const homePage = new HomePage(page);
     const itemPage = new ItemPage(page);
 
     await homePage.goto();
     await homePage.clickFirstItemDetails();
-    await itemPage.verifyCalendarVisible();
-    });
+    await Promise.all([
+      page.waitForNavigation(),
+      itemPage.verifyCalendarVisible(),
+    ]);
+  });
 
-    test('verificar que se pueda ver las reservas con 2 meses de anticipacion', async ({ page }) => {
+  test('verificar que se pueda ver las reservas con 2 meses de anticipacion', async ({ page }) => {
     const homePage = new HomePage(page);
     const itemPage = new ItemPage(page);
 
@@ -168,7 +171,10 @@ test.describe('Página de Item', () => {
     steps++;
 
     //Paso 3: Enviar solicitud
-    await item.submitReservation();
+    await Promise.all([
+      page.waitForNavigation(),
+      item.submitReservation(),
+    ]);
     steps++;
 
     //Paso 4: Confirmación exitosa

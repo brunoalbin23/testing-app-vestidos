@@ -14,7 +14,7 @@ export default function Header() {
           <Link href="/faq" className="hover:text-fuchsia-600">FAQ</Link>
         </nav>
         <div className="flex items-center gap-3">
-          <Link href="/admin/login" className="text-sm hover:text-fuchsia-600">Admin</Link>
+
           <Link href="/become-a-lender" className="inline-flex items-center rounded-full bg-fuchsia-600 text-white px-4 py-2 text-sm font-medium hover:bg-fuchsia-500">
             Become a lender
           </Link>
@@ -24,3 +24,5 @@ export default function Header() {
   );
 }
 
+
+//<Link href="/admin/login" className="text-sm hover:text-fuchsia-600">Admin</Link>

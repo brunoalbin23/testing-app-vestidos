@@ -19,7 +19,6 @@ export class CatalogPage {
     await expect(this.page.getByRole('link', { name: 'Featured', exact: true })).toBeVisible();
     await expect(this.page.getByRole('link', { name: 'FAQ', exact: true })).toBeVisible();
     await expect(this.page.getByRole('link', { name: 'Become a lender', exact: true })).toBeVisible();
-    await expect(this.page.getByRole('link', { name: 'Admin', exact: true })).toBeVisible();
   }
 
   async assertFilterExists(name: string) {

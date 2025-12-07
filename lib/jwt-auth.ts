@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
+import { JWT_SECRET } from "./jwt-secret";
 
-const SECRET_KEY = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+const SECRET_KEY = JWT_SECRET;
 const TOKEN_COOKIE = 'admin_token';
 const TOKEN_EXPIRY = '7d'; // 7 days
 

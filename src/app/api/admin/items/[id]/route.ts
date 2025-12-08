@@ -1,15 +1,11 @@
 import { NextResponse } from "next/server";
-import { isAdmin } from "@/lib/CsrfSessionManagement";
-import { updateItem, deleteItem, getItem } from "@/lib/RentalManagementSystem";
-import { verifyCsrfToken } from "@/lib/CsrfSessionManagement";
+import { isAdmin } from "@/lib/jwt-auth";
+import { updateItem } from "@/lib/RentalManagementSystem";
 import type { Category } from "@/lib/types";
+import { deleteItem } from "@/lib/RentalManagementSystem";
 
-export async function PUT(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const admin = await isAdmin();
-  if (!admin) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAdmin())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -17,10 +13,6 @@ export async function PUT(
   const id = Number(idParam);
 
   const form = await req.formData();
-  const csrf = form.get("csrf")?.toString() ?? null;
-  if (!verifyCsrfToken(csrf)) {
-    return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
-  }
 
   const name = form.get("name")?.toString().trim();
   const category = form.get("category")?.toString() as Category | undefined;
@@ -37,21 +29,26 @@ export async function PUT(
   if (name) updateData.name = name;
   if (category) updateData.category = category;
   if (pricePerDay !== undefined) updateData.pricePerDay = pricePerDay;
+
   if (sizesStr) {
     const sizes = sizesStr.split(",").map((s) => s.trim()).filter(Boolean);
     if (sizes.length > 0) updateData.sizes = sizes;
   }
+
   if (color) updateData.color = color;
   if (style !== undefined) updateData.style = style || undefined;
   if (description) updateData.description = description;
+
   if (imagesStr) {
     const images = imagesStr.split(",").map((s) => s.trim()).filter(Boolean);
     if (images.length > 0) updateData.images = images;
   }
+
   if (alt) updateData.alt = alt;
   if (stock !== undefined) updateData.stock = stock;
 
   const item = updateItem(id, updateData);
+
   if (!item) {
     return NextResponse.json({ error: "Item not found" }, { status: 404 });
   }
@@ -59,29 +56,19 @@ export async function PUT(
   return NextResponse.json({ item });
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const admin = await isAdmin();
-  if (!admin) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAdmin())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { id: idParam } = await params;
   const id = Number(idParam);
 
-  const form = await req.formData();
-  const csrf = form.get("csrf")?.toString() ?? null;
-  if (!verifyCsrfToken(csrf)) {
-    return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
-  }
-
   const success = deleteItem(id);
+
   if (!success) {
     return NextResponse.json({ error: "Item not found" }, { status: 404 });
   }
 
   return NextResponse.json({ success: true });
 }
-

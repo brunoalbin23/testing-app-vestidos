@@ -1,9 +1,14 @@
 import { test } from '../fixtures/admin-fixture';
 import { expect } from '@playwright/test';
+import { AdminListPage } from '../pages/admin-list-page';
+import { AdminFormPage } from '../pages/admin-form-page';
 
 test.describe.serial('CRUD artículos admin', () => {
 
   test('crear articulo desde admin', async ({ adminPage, page }) => {
+    const list = new AdminListPage(page);
+    const form = new AdminFormPage(page);
+
     const newItem = {
       name: 'Vestido Test E2E ' + Date.now(),
       category: 'dress',
@@ -20,32 +25,29 @@ test.describe.serial('CRUD artículos admin', () => {
     await adminPage.assertIsVisible();
     await page.waitForTimeout(500);
 
-    await page.getByRole('button', { name: /Agregar Artículo/i }).click();
+    await list.clickAddArticle();
     await page.waitForTimeout(500);
 
-    await page.fill('#name', newItem.name);
-    await page.selectOption('#category', newItem.category);
-    await page.fill('#pricePerDay', newItem.pricePerDay);
+    await form.fillName(newItem.name);
+    await form.selectCategory(newItem.category);
+    await form.fillPrice(newItem.pricePerDay);
+    await form.selectSizes(newItem.sizes);
+    await form.selectColor(newItem.color);
+    await form.selectStyle(newItem.style);
+    await form.fillImages(newItem.images);
+    await form.fillAlt(newItem.alt);
+    await form.fillDescription(newItem.description);
+    await form.fillStock(newItem.stock);
 
-    for (const size of newItem.sizes) {
-      await page.getByRole('checkbox', { name: size, exact: true }).check();
-    }
+    await form.submitCreate();
 
-    await page.selectOption('#color', newItem.color);
-    await page.selectOption('#style', newItem.style);
-
-    await page.fill('#images', newItem.images);
-    await page.fill('#alt', newItem.alt);
-    await page.fill('#description', newItem.description);
-    await page.fill('#stock', newItem.stock);
-
-    await page.getByRole('button', { name: /Crear Artículo/i }).click();
-
-    await page.waitForSelector(`tbody tr:has-text("${newItem.name}")`, { timeout: 5000 });
-    await expect(page.getByText(newItem.name)).toBeVisible();
+    await list.assertRowVisibleByExactName(newItem.name);
   });
 
   test('editar articulo desde admin', async ({ adminPage, page }) => {
+    const list = new AdminListPage(page);
+    const form = new AdminFormPage(page);
+
     const updatedData = {
       name: 'Vestido Editado ' + Date.now(),
       category: 'jacket',
@@ -62,68 +64,46 @@ test.describe.serial('CRUD artículos admin', () => {
     await adminPage.assertIsVisible();
     await page.waitForTimeout(500);
 
-    const targetRow = page.locator('tbody tr', {
-      has: page.locator('td', { hasText: /^Vestido Test E2E/ })
-    }).first();
-
+    const targetRow = list.getRowByNameStartsWith('Vestido Test E2E');
     await expect(targetRow).toBeVisible();
+
     await targetRow.getByRole('button', { name: /Editar/i }).click();
     await page.waitForTimeout(500);
 
-    await page.fill('#name', updatedData.name);
-    await page.selectOption('#category', updatedData.category);
-    await page.fill('#pricePerDay', updatedData.pricePerDay);
+    await form.fillName(updatedData.name);
+    await form.selectCategory(updatedData.category);
+    await form.fillPrice(updatedData.pricePerDay);
 
     const allSizes = ["XS", "S", "M", "L", "XL"];
-    for (const size of allSizes) {
-      const checkbox = page.getByRole('checkbox', { name: size, exact: true });
-      if (updatedData.sizes.includes(size)) {
-        await checkbox.check();
-      } else {
-        await checkbox.uncheck();
-      }
-    }
+    await form.selectSizes(updatedData.sizes, allSizes);
 
-    await page.selectOption('#color', updatedData.color);
-    await page.selectOption('#style', updatedData.style);
+    await form.selectColor(updatedData.color);
+    await form.selectStyle(updatedData.style);
+    await form.fillImages(updatedData.images);
+    await form.fillAlt(updatedData.alt);
+    await form.fillDescription(updatedData.description);
+    await form.fillStock(updatedData.stock);
 
-    await page.fill('#images', updatedData.images);
-    await page.fill('#alt', updatedData.alt);
-    await page.fill('#description', updatedData.description);
-    await page.fill('#stock', updatedData.stock);
+    await form.submitUpdate();
 
-    await page.getByRole('button', { name: /Actualizar Artículo/i }).click();
-
-    await page.waitForSelector(`tbody tr:has-text("${updatedData.name}")`, { timeout: 5000 });
-    await expect(page.getByText(updatedData.name)).toBeVisible();
+    await list.assertRowVisibleByExactName(updatedData.name);
   });
 
   test('eliminar articulo desde admin', async ({ adminPage, page }) => {
+    const list = new AdminListPage(page);
+
     await adminPage.assertIsVisible();
 
-    // Listener global PARA ESTE TEST: si aparece un popup → aceptar
-    page.once('dialog', async dialog => {
-      await dialog.accept();
-    });
+    page.once('dialog', async dialog => { await dialog.accept(); });
 
-    // Buscar la fila del artículo editado
-    const editedRow = page.locator('tbody tr', {
-      has: page.locator('td', { hasText: /^Vestido Editado/ })
-    }).first();
-
+    const editedRow = list.getRowByNameStartsWith('Vestido Editado');
     await expect(editedRow).toBeVisible();
 
-    // Obtener el nombre exacto del artículo (para verificar luego)
     const itemName = await editedRow.locator('td:nth-child(2)').innerText();
 
-    // Hacer click en "Eliminar"
     await editedRow.getByRole('button', { name: /Eliminar/i }).click();
 
-    // 🔥 Como estamos usando popup (dialog), NO usamos el botón Confirmar.
-    // El listener already aceptó el popup.
-
-    // Esperar a que desaparezca de la tabla
-    await expect(page.locator(`tbody tr:has-text("${itemName}")`)).toHaveCount(0);
+    await list.waitRowToDisappear(itemName);
   });
-  
+
 });

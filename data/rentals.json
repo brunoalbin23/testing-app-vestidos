@@ -1,0 +1,80 @@
+[
+  {
+    "itemId": 7,
+    "start": "2025-11-27",
+    "end": "2025-11-29",
+    "customer": {
+      "name": "Bruno Albín",
+      "email": "albinbruno23@gmail.com",
+      "phone": "091697659"
+    },
+    "id": "8b1cb906-3810-40f9-82cb-8fa5577df4f8",
+    "createdAt": "2025-11-26T15:16:56.583Z",
+    "status": "active"
+  },
+  {
+    "itemId": 1,
+    "start": "2025-11-26",
+    "end": "2025-11-27",
+    "customer": {
+      "name": "pepito",
+      "email": "pepito@gmail.com",
+      "phone": "099999999"
+    },
+    "id": "6705a7c6-5b9a-43cf-a955-3eec9e01b501",
+    "createdAt": "2025-11-26T18:42:07.029Z",
+    "status": "active"
+  },
+  {
+    "itemId": 1,
+    "start": "2025-12-01",
+    "end": "2025-12-03",
+    "customer": {
+      "name": "Test User",
+      "email": "test@example.com",
+      "phone": "1234567890"
+    },
+    "id": "33c31cf0-35ed-445c-a843-92e1f73f1725",
+    "createdAt": "2025-11-26T18:47:14.359Z",
+    "status": "active"
+  },
+  {
+    "itemId": 1,
+    "start": "2025-12-10",
+    "end": "2025-12-12",
+    "customer": {
+      "name": "Test User Flow",
+      "email": "testflow@example.com",
+      "phone": "1234567890"
+    },
+    "id": "704b8cc6-3d6c-4779-a22f-9ed27cd62ccd",
+    "createdAt": "2025-11-26T18:51:34.346Z",
+    "status": "active"
+  },
+  {
+    "itemId": 1,
+    "start": "2025-12-15",
+    "end": "2025-12-17",
+    "customer": {
+      "name": "Test User Flow",
+      "email": "testflow@example.com",
+      "phone": "1234567890"
+    },
+    "id": "37e67235-ff11-42eb-8974-24c59bae76b6",
+    "createdAt": "2025-11-26T18:57:38.445Z",
+    "status": "canceled"
+  },
+  {
+    "itemId": 1,
+    "start": "2025-11-12",
+    "end": "2025-11-16",
+    "customer": {
+      "name": "pepito",
+      "email": "pepito@gmail.com",
+      "phone": "099999999"
+    },
+    "id": "5ef0dfda-2146-40e8-a4a1-6f1633840f97",
+    "createdAt": "2025-11-26T20:05:38.148Z",
+    "status": "canceled"
+  }
+]

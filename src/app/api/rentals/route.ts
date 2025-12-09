@@ -18,6 +18,7 @@ function calculateDaysDifference(startDate: string, endDate: string): number {
 }
 
 export async function POST(req: Request) {
+<<<<<<< HEAD
   let itemId: number | NaN = NaN;
   let name = "";
   let email = "";
@@ -56,7 +57,20 @@ export async function POST(req: Request) {
     } catch (e) {
       return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
     }
+=======
+  const form = await req.formData();
+  const csrf = form.get("csrf")?.toString() ?? null;
+  if (!verifyCsrfToken(csrf)) {
+    return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
+>>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
   }
+
+  const itemId = Number(form.get("itemId") || NaN);
+  const name = (form.get("name") || "").toString().trim();
+  const email = (form.get("email") || "").toString().trim();
+  const phone = (form.get("phone") || "").toString().trim();
+  const start = normalizeDate((form.get("start") || "").toString());
+  const end = normalizeDate((form.get("end") || "").toString());
 
   if (!itemId || !name || !email || !phone || !start || !end) {
     return NextResponse.json({ error: "Missing or invalid fields" }, { status: 400 });

@@ -4,8 +4,16 @@ import { updateItem } from "@/lib/RentalManagementSystem";
 import type { Category } from "@/lib/types";
 import { deleteItem } from "@/lib/RentalManagementSystem";
 
+<<<<<<< HEAD
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!(await isAdmin())) {
+=======
+export async function PUT(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  if (!isAdmin()) {
+>>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -13,6 +21,13 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   const id = Number(idParam);
 
   const form = await req.formData();
+<<<<<<< HEAD
+=======
+  const csrf = form.get("csrf")?.toString() ?? null;
+  if (!(await verifyCsrfToken(csrf))) {
+    return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
+  }
+>>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
 
   const name = form.get("name")?.toString().trim();
   const category = form.get("category")?.toString() as Category | undefined;
@@ -56,14 +71,31 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   return NextResponse.json({ item });
 }
 
+<<<<<<< HEAD
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!(await isAdmin())) {
+=======
+export async function DELETE(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  if (!isAdmin()) {
+>>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { id: idParam } = await params;
   const id = Number(idParam);
 
+<<<<<<< HEAD
+=======
+  const form = await req.formData();
+  const csrf = form.get("csrf")?.toString() ?? null;
+  if (!(await verifyCsrfToken(csrf))) {
+    return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
+  }
+
+>>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
   const success = deleteItem(id);
 
   if (!success) {

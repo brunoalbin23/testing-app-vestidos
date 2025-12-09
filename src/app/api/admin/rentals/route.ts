@@ -1,12 +1,7 @@
 import { NextResponse } from "next/server";
-<<<<<<< HEAD
 import { isAdmin } from "@/lib/jwt-auth";
 import { listRentals, cancelRental } from "@/lib/RentalManagementSystem";
 import { log } from "console";
-=======
-import { isAdmin } from "@/lib/CsrfSessionManagement";
-import { listRentals } from "@/lib/RentalManagementSystem";
->>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
 
 export function GET() {
   if (!isAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

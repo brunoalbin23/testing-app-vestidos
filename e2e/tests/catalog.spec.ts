@@ -40,11 +40,7 @@ test.describe('Catalog page', () => {
     // Verificar que el filtro de talles tenga las opciones correctas
     await catalog.assertCategorieOptions(['Dresses', 'Shoes', 'Bags', 'Jackets']);
     await catalog.assertSizeOptions(['XS', 'S', 'M', 'L', 'XL']);
-<<<<<<< HEAD
     await catalog.assertColorOptions(['Black','Blue', 'Burgundy', 'Floral', 'Green', 'Gold', 'Red']);
-=======
-    await catalog.assertColorOptions(['Black', 'Burgundy', 'Champagne', 'Floral']);
->>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
     await catalog.assertStyleOptions(['Black tie', 'Cocktail', 'Daytime', 'Evening']);
   });
 

@@ -139,13 +139,8 @@ export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormPr
         </div>
         
         <div>
-<<<<<<< HEAD
           <label className="block text-sm font-medium mb-1">
             Tallas *
-=======
-          <label htmlFor="sizes" className="block text-sm font-medium mb-1">
-            Sizes (comma-separated) *
->>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
           </label>
 
           <div className="flex flex-wrap gap-3">
@@ -194,11 +189,7 @@ export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormPr
 
         <div>
           <label htmlFor="style" className="block text-sm font-medium mb-1">
-<<<<<<< HEAD
             Estilo *
-=======
-            Style (optional)
->>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
           </label>
 
           <select

@@ -51,19 +51,11 @@ test.describe('Página de Item', () => {
 
     // Completar formulario con rango inválido
     await itemPage.fillReservationForm({
-<<<<<<< HEAD
       name: 'pepito',
       email: 'pepito@gmail.com',
       phone: '099999999',
       startDate: formatDate(startDate),
       endDate: formatDate(endDate),
-=======
-        name: 'pepito',
-        email: 'pepito@gmail.com',
-        phone: '099999999',
-        startDate: '2025-11-12',
-        endDate: '3000-11-12',
->>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
     });
 
     await itemPage.submitReservation();
@@ -131,13 +123,8 @@ test.describe('Página de Item', () => {
       name: 'pepito',
       email: 'pepito@', //inválido
       phone: '099999999',
-<<<<<<< HEAD
       startDate: formatDate(startDate),
       endDate: formatDate(endDate),
-=======
-      startDate: '2025-11-12',
-      endDate: '2025-11-16',
->>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
     });
 
     // Intentar enviar
@@ -183,16 +170,11 @@ test.describe('Página de Item', () => {
     });
     steps++;
 
-<<<<<<< HEAD
     //Paso 3: Enviar solicitud
     await Promise.all([
       page.waitForNavigation(),
       item.submitReservation(),
     ]);
-=======
-    // Paso 3: Enviar solicitud
-    await item.submitReservation();
->>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
     steps++;
 
     //Paso 4: Confirmación exitosa

@@ -61,7 +61,6 @@ export default async function Page() {
                   <td className="py-2 pr-4 capitalize">{r.status}</td>
                   <td className="py-2 pr-4">
                     {r.status === "active" ? (
-<<<<<<< HEAD
                       <form action="/api/admin/rentals" method="POST">
                         <input type="hidden" name="id" value={r.id} />
                         <input type="hidden" name="action" value="cancel" />
@@ -71,16 +70,6 @@ export default async function Page() {
                         >
                           Cancelar
                         </button>
-=======
-                      <form
-                        onSubmit={async () => {
-                        }}
-                        action={`/api/admin/rentals/${r.id}/cancel`}
-                        method="POST"
-                      >
-                        <input type="hidden" name="csrf" value={csrf} />
-                        <button className="rounded-lg border px-3 py-1 hover:bg-slate-50 dark:hover:bg-slate-800">Cancel</button>
->>>>>>> parent of 4d5eff9 (Merge pull request #1 from brunoalbin23/feature/admin)
                       </form>
                     ) : (
                       <span className="text-slate-400">—</span>

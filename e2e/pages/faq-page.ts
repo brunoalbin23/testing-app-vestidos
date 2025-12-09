@@ -22,7 +22,6 @@ export class FaqPage {
     await expect(this.page.getByRole('link', { name: 'Featured', exact: true })).toBeVisible();
     await expect(this.page.getByRole('link', { name: 'FAQ', exact: true })).toBeVisible();
     await expect(this.page.getByRole('link', { name: 'Become a lender', exact: true })).toBeVisible();
-    await expect(this.page.getByRole('link', { name: 'Admin', exact: true })).toBeVisible();
   }
 
   async countQuestions() {

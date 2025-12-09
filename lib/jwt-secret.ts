@@ -1,0 +1,1 @@
+export const JWT_SECRET = "mi_clave_ultra_secreta_123";

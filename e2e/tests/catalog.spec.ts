@@ -40,7 +40,7 @@ test.describe('Catalog page', () => {
     // Verificar que el filtro de talles tenga las opciones correctas
     await catalog.assertCategorieOptions(['Dresses', 'Shoes', 'Bags', 'Jackets']);
     await catalog.assertSizeOptions(['XS', 'S', 'M', 'L', 'XL']);
-    await catalog.assertColorOptions(['Black', 'Burgundy', 'Champagne', 'Floral']);
+    await catalog.assertColorOptions(['Black','Blue', 'Burgundy', 'Floral', 'Green', 'Gold', 'Red']);
     await catalog.assertStyleOptions(['Black tie', 'Cocktail', 'Daytime', 'Evening']);
   });
 

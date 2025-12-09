@@ -1,7 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import {listItems, type Category} from "../../../lib/RentalManagementSystem";
-import {getAvailableSizes, getAvailableColors, getAvailableStyles} from "../../../lib/items-service";
+import { listItems, type Category } from "../../../lib/RentalManagementSystem";
+import {
+  ALLOWED_CATEGORIES,
+  ALLOWED_SIZES,
+  ALLOWED_COLORS,
+  ALLOWED_STYLES,
+} from "../../../lib/filters-config";
 
 type SearchParams = {
   q?: string;
@@ -16,6 +21,7 @@ type SearchParams = {
 export default async function Page({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const resolvedParams = await searchParams;
   const { q = "", category = "", size = "", color = "", style = "" } = resolvedParams;
+
   const items = listItems({
     q,
     category: category || undefined,
@@ -24,71 +30,72 @@ export default async function Page({ searchParams }: { searchParams: Promise<Sea
     style: style || undefined,
   });
 
-  const availableSizes = getAvailableSizes();
-  const availableColors = getAvailableColors();
-  const availableStyles = getAvailableStyles();
-
   const hasActiveFilters = category || size || color || style || q;
-  
+
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
       <h1 className="text-2xl sm:text-3xl font-bold">Browse catalog</h1>
+
       <form method="GET" className="mt-6 space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
-          <input 
-            name="q" 
-            defaultValue={q} 
-            placeholder="Search by name, color, or style…" 
-            className="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent outline-none" 
+
+          {/* Search input */}
+          <input
+            name="q"
+            defaultValue={q}
+            placeholder="Search by name, color, or style…"
+            className="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm"
           />
-          <select 
-            name="category" 
-            defaultValue={category} 
-            className="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900 focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent outline-none"
+
+          {/* CATEGORY */}
+          <select
+            name="category"
+            defaultValue={category}
+            className="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900"
           >
             <option value="">All categories</option>
-            <option value="dress">Dresses</option>
-            <option value="shoes">Shoes</option>
-            <option value="bag">Bags</option>
-            <option value="jacket">Jackets</option>
+            {ALLOWED_CATEGORIES.map(cat => (
+              <option key={cat.value} value={cat.value}>{cat.label}</option>
+            ))}
           </select>
-          <select 
-            name="size" 
-            defaultValue={size} 
-            className="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900 focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent outline-none"
+
+          {/* SIZE */}
+          <select
+            name="size"
+            defaultValue={size}
+            className="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900"
           >
             <option value="">Any size</option>
-            {availableSizes.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
+            {ALLOWED_SIZES.map(s => (
+              <option key={s} value={s}>{s}</option>
             ))}
           </select>
-          <select 
-            name="color" 
-            defaultValue={color} 
-            className="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900 focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent outline-none"
+
+          {/* COLOR */}
+          <select
+            name="color"
+            defaultValue={color}
+            className="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900"
           >
             <option value="">Any color</option>
-            {availableColors.map((c) => (
-              <option key={c} value={c}>
-                {c.charAt(0).toUpperCase() + c.slice(1)}
-              </option>
+            {ALLOWED_COLORS.map(c => (
+              <option key={c} value={c}>{c}</option>
             ))}
           </select>
-          <select 
-            name="style" 
-            defaultValue={style} 
-            className="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900 focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent outline-none"
+
+          {/* STYLE */}
+          <select
+            name="style"
+            defaultValue={style}
+            className="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900"
           >
             <option value="">Any style</option>
-            {availableStyles.map((s) => (
-              <option key={s} value={s}>
-                {s.charAt(0).toUpperCase() + s.slice(1).replace(/-/g, " ")}
-              </option>
+            {ALLOWED_STYLES.map(s => (
+              <option key={s} value={s}>{s}</option>
             ))}
           </select>
-          <button 
+
+          <button
             type="submit"
             className="rounded-xl bg-fuchsia-600 text-white px-4 py-2 text-sm font-medium hover:bg-fuchsia-500 transition-colors"
           >

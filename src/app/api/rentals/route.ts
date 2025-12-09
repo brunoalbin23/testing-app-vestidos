@@ -18,18 +18,45 @@ function calculateDaysDifference(startDate: string, endDate: string): number {
 }
 
 export async function POST(req: Request) {
-  const form = await req.formData();
-  const csrf = form.get("csrf")?.toString() ?? null;
-  if (!verifyCsrfToken(csrf)) {
-    return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
-  }
+  let itemId: number | NaN = NaN;
+  let name = "";
+  let email = "";
+  let phone = "";
+  let start: string | null = null;
+  let end: string | null = null;
 
-  const itemId = Number(form.get("itemId") || NaN);
-  const name = (form.get("name") || "").toString().trim();
-  const email = (form.get("email") || "").toString().trim();
-  const phone = (form.get("phone") || "").toString().trim();
-  const start = normalizeDate((form.get("start") || "").toString());
-  const end = normalizeDate((form.get("end") || "").toString());
+  // Intentar leer FormData; si falla, intentar JSON body
+  try {
+    const form = await req.formData();
+    /*const csrf = form.get("csrf")?.toString() ?? null;
+    if (!verifyCsrfToken(csrf)) {
+      return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
+    }*/
+
+    itemId = Number(form.get("itemId") || NaN);
+    name = (form.get("name") || "").toString().trim();
+    email = (form.get("email") || "").toString().trim();
+    phone = (form.get("phone") || "").toString().trim();
+    start = normalizeDate((form.get("start") || "").toString());
+    end = normalizeDate((form.get("end") || "").toString());
+  } catch (err) {
+    try {
+      const json = await req.json();
+      /*const csrf = (json.csrf as string) ?? null;
+      if (!verifyCsrfToken(csrf)) {
+        return NextResponse.json({ error: "Invalid CSRF token" }, { status: 400 });
+      }*/
+
+      itemId = Number(json.itemId || NaN);
+      name = (json.name || "").toString().trim();
+      email = (json.email || "").toString().trim();
+      phone = (json.phone || "").toString().trim();
+      start = normalizeDate((json.start || "").toString());
+      end = normalizeDate((json.end || "").toString());
+    } catch (e) {
+      return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+    }
+  }
 
   if (!itemId || !name || !email || !phone || !start || !end) {
     return NextResponse.json({ error: "Missing or invalid fields" }, { status: 400 });

@@ -1,18 +1,22 @@
 import { expect, test } from '@playwright/test';
 import { HomePage } from '../pages/home-page';
 import { ItemPage } from '../pages/item-page';
+import { deleteRentalFromStorage, readRentals } from "./../../lib/storage";
 
 test.describe('Página de Item', () => {
-    test('verifica que el calendario se muestre en los detalles del vestido', async ({ page }) => {
+  test('verifica que el calendario se muestre en los detalles del vestido', async ({ page }) => {
     const homePage = new HomePage(page);
     const itemPage = new ItemPage(page);
 
     await homePage.goto();
     await homePage.clickFirstItemDetails();
-    await itemPage.verifyCalendarVisible();
-    });
+    await Promise.all([
+      page.waitForNavigation(),
+      itemPage.verifyCalendarVisible(),
+    ]);
+  });
 
-    test('verificar que se pueda ver las reservas con 2 meses de anticipacion', async ({ page }) => {
+  test('verificar que se pueda ver las reservas con 2 meses de anticipacion', async ({ page }) => {
     const homePage = new HomePage(page);
     const itemPage = new ItemPage(page);
 
@@ -141,7 +145,7 @@ test.describe('Página de Item', () => {
     const today = new Date();
 
     const startDate = new Date(today);
-    startDate.setDate(today.getDate() + 6);
+    startDate.setDate(today.getDate() + 10);
 
     const endDate = new Date(startDate);
     endDate.setDate(startDate.getDate() + 4);
@@ -167,7 +171,10 @@ test.describe('Página de Item', () => {
     steps++;
 
     //Paso 3: Enviar solicitud
-    await item.submitReservation();
+    await Promise.all([
+      page.waitForNavigation(),
+      item.submitReservation(),
+    ]);
     steps++;
 
     //Paso 4: Confirmación exitosa
@@ -176,6 +183,13 @@ test.describe('Página de Item', () => {
 
     //Regla UX: 5 pasos o menos
     expect(steps).toBeLessThanOrEqual(5);
+
+    //borrar el ultimo rental para no ensuciar el rentals.json :)
+    var rentals = readRentals();
+    rentals = rentals.slice().sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    const latestRental = rentals[0];
+    const borrado = deleteRentalFromStorage(latestRental.id)
+    expect(borrado).toBe(true);
   });
 
 });

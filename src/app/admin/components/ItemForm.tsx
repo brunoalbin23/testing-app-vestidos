@@ -5,17 +5,18 @@ import type { Item, Category } from "@/lib/types";
 
 type ItemFormProps = {
   item?: Item;
-  csrf: string;
   onSuccess: () => void;
   onCancel: () => void;
 };
 
-export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormProps) {
+export default function ItemForm({ item, onSuccess, onCancel }: ItemFormProps) {
   const [name, setName] = useState(item?.name || "");
   const [category, setCategory] = useState<Category>(item?.category || "dress");
   const [pricePerDay, setPricePerDay] = useState(item?.pricePerDay.toString() || "");
-  const [sizes, setSizes] = useState(item?.sizes.join(", ") || "");
-  const [color, setColor] = useState(item?.color || "");
+  const [sizes, setSizes] = useState<string[]>(item?.sizes || []);
+  const COLOR_OPTIONS = ["Black","Blue", "Burgundy", "Floral", "Green", "Gold", "Red"];
+  const [color, setColor] = useState(item?.color || COLOR_OPTIONS[0]);
+  const STYLE_OPTIONS = ["Black tie", "Cocktail", "Daytime", "Evening"];
   const [style, setStyle] = useState(item?.style || "");
   const [description, setDescription] = useState(item?.description || "");
   const [images, setImages] = useState(item?.images.join(", ") || "");
@@ -30,22 +31,11 @@ export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormPr
     setIsSubmitting(true);
 
     try {
-      // Obtener el token CSRF de la cookie del navegador
-      function getCookie(name: string): string | null {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
-        return null;
-      }
-      
-      const cookieToken = getCookie('gr_csrf') || csrf;
-      
       const formData = new FormData();
-      formData.append("csrf", cookieToken);
       formData.append("name", name.trim());
       formData.append("category", category);
       formData.append("pricePerDay", pricePerDay);
-      formData.append("sizes", sizes.trim());
+      formData.append("sizes", sizes.join(","));
       formData.append("color", color.trim());
       if (style) formData.append("style", style.trim());
       formData.append("description", description.trim());
@@ -88,7 +78,7 @@ export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormPr
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium mb-1">
-            Name *
+            Nombre *
           </label>
           <input
             id="name"
@@ -102,7 +92,7 @@ export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormPr
 
         <div>
           <label htmlFor="category" className="block text-sm font-medium mb-1">
-            Category *
+            Categoría *
           </label>
           <select
             id="category"
@@ -112,16 +102,16 @@ export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormPr
             required
             className="w-full rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900"
           >
-            <option value="dress">Dress</option>
-            <option value="shoes">Shoes</option>
-            <option value="bag">Bag</option>
-            <option value="jacket">Jacket</option>
+            <option value="dress">Vestido</option>
+            <option value="shoes">Zapatos</option>
+            <option value="bag">Bolsa</option>
+            <option value="jacket">Chaqueta</option>
           </select>
         </div>
 
         <div>
           <label htmlFor="pricePerDay" className="block text-sm font-medium mb-1">
-            Price per day ($) *
+            Precio por día ($) *
           </label>
           <input
             id="pricePerDay"
@@ -135,52 +125,81 @@ export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormPr
             className="w-full rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900"
           />
         </div>
-
+        
         <div>
-          <label htmlFor="sizes" className="block text-sm font-medium mb-1">
-            Sizes (comma-separated) *
+          <label className="block text-sm font-medium mb-1">
+            Tallas *
           </label>
-          <input
-            id="sizes"
-            name="sizes"
-            value={sizes}
-            onChange={(e) => setSizes(e.target.value)}
-            placeholder="XS, S, M, L, XL"
-            required
-            className="w-full rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900"
-          />
+
+          <div className="flex flex-wrap gap-3">
+            {["XS", "S", "M", "L", "XL"].map((size) => (
+              <label
+                key={size}
+                className="flex items-center gap-2 text-sm cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  checked={sizes.includes(size)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSizes([...sizes, size]);
+                    } else {
+                      setSizes(sizes.filter((s) => s !== size));
+                    }
+                  }}
+                  className="h-4 w-4 rounded border-slate-300 dark:border-slate-700"
+                />
+                {size}
+              </label>
+            ))}
+          </div>
         </div>
 
         <div>
           <label htmlFor="color" className="block text-sm font-medium mb-1">
             Color *
           </label>
-          <input
+          <select
             id="color"
             name="color"
             value={color}
             onChange={(e) => setColor(e.target.value)}
             required
             className="w-full rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900"
-          />
+          >
+            {COLOR_OPTIONS.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>
           <label htmlFor="style" className="block text-sm font-medium mb-1">
-            Style (optional)
+            Estilo *
           </label>
-          <input
+
+          <select
             id="style"
             name="style"
             value={style}
             onChange={(e) => setStyle(e.target.value)}
+            required
             className="w-full rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm bg-white dark:bg-slate-900"
-          />
+          >
+            <option value="">Seleccionar estilo...</option>
+            {STYLE_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>
           <label htmlFor="stock" className="block text-sm font-medium mb-1">
-            Stock quantity (optional)
+            Cantidad en stock (opcional)
           </label>
           <input
             id="stock"
@@ -195,7 +214,7 @@ export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormPr
 
         <div>
           <label htmlFor="images" className="block text-sm font-medium mb-1">
-            Images (comma-separated paths) *
+            Imágenes (rutas separadas por comas) *
           </label>
           <input
             id="images"
@@ -211,7 +230,7 @@ export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormPr
 
       <div>
         <label htmlFor="description" className="block text-sm font-medium mb-1">
-          Description *
+          Descripción *
         </label>
         <textarea
           id="description"
@@ -226,7 +245,7 @@ export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormPr
 
       <div>
         <label htmlFor="alt" className="block text-sm font-medium mb-1">
-          Alt text (for images) *
+          Texto alternativo (para imágenes) *
         </label>
         <input
           id="alt"
@@ -245,14 +264,14 @@ export default function ItemForm({ item, csrf, onSuccess, onCancel }: ItemFormPr
           disabled={isSubmitting}
           className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-sm hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50"
         >
-          Cancel
+          Cancelar
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
           className="px-4 py-2 rounded-xl bg-fuchsia-600 text-white text-sm font-medium hover:bg-fuchsia-500 disabled:opacity-50"
         >
-          {isSubmitting ? "Saving..." : item ? "Update Item" : "Create Item"}
+          {isSubmitting ? "Guardando..." : item ? "Actualizar Artículo" : "Crear Artículo"}
         </button>
       </div>
     </form>

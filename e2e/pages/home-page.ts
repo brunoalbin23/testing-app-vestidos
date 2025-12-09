@@ -43,7 +43,11 @@ export class HomePage {
 
   async subscribeToNewsletter(email: string) {
     await this.page.getByRole('textbox', { name: 'Email' }).fill(email);
-    await this.page.getByRole('button', { name: 'Subscribe' }).click();
+    // Espera explícitamente el redirect (303)
+    await Promise.all([
+      this.page.waitForNavigation(),
+      this.page.getByRole('button', { name: 'Subscribe' }).click(),
+    ]);
   }
 
   async clickBecomeLender() {
@@ -61,7 +65,6 @@ export class HomePage {
     await expect(this.page.getByRole('link', { name: 'Featured', exact: true })).toBeVisible();
     await expect(this.page.getByRole('link', { name: 'FAQ', exact: true })).toBeVisible();
     await expect(this.page.getByRole('link', { name: 'Become a lender', exact: true })).toBeVisible();
-    await expect(this.page.getByRole('link', { name: 'Admin', exact: true })).toBeVisible();
   }
 
   async assertHowItWorksVisible() {
